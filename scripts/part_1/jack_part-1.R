@@ -10,14 +10,14 @@ library(openair)
 
 # Reading in data ---------------------------------------------------------
 
-met = read.csv(file = "data/part_1/MY1_met_2018.csv") |> # CONCEPT: Read CSV
-  select(-X) # CONCEPT: Selecting Columns
-
 no = read.csv(file = "data/part_1/MY1_no_2018.csv")
 
 no2 = read.csv(file = "data/part_1/MY1_no2_2018.csv")
 
 o3 = read.csv(file = "data/part_1/MY1_o3_2018.csv")
+
+met = read.csv(file = "data/part_1/MY1_met_2018.csv") |> # CONCEPT: Read CSV
+  select(-X) # CONCEPT: Selecting Columns
 
 # Examine Data ------------------------------------------------------------
 

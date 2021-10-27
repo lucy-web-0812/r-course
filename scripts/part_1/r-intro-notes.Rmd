@@ -7,6 +7,8 @@ output: html_notebook
 
 - Type some maths in
 
+- Do some logic too (will be used more on Fri)
+
 - Say where it is, draw attention to printing of results
 
 - These results aren't "recoverable" - leads on to...

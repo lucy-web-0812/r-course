@@ -8,6 +8,9 @@ no
 
 library(dplyr)
 
+glimpse(no)
+View(no)
+
 tibble(no)
 
 no = tibble(no)
