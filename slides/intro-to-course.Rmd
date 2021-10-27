@@ -30,7 +30,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 *A course over two afternoons for beginners with R*
 
-- Brief introduction to R, RStudio and Programming for beginners
+- Introduction to R, RStudio and Programming for beginners
 - Building a script - reading, manipulating and visualising data
 - Using the `openair` package for processing air quality data
 - More advanced tips & tricks to solve common problems in atmospheric science
@@ -53,8 +53,8 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 - Introduction to R for Air Quality Data
   - Getting familiar with R and RStudio
-  - What is a package and how do you use one?
-  - Reading and manipulating data in R
+  - Reading and interrogating data within R
+  - Statistical analysis of data
   - Using `openair` for air quality data analysis
   
 **Friday 12th November, 13:00-17:00**
@@ -69,9 +69,21 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 **Jack Davison**
 
-- Fourth year PhD Student working with David Carslaw
-- RStudio certified `tidyverse` instructor
-- Work involves extracting insight from large data sets
+I use R for:
+
+-  **Big data** analysis - far too big for Excel!
+-  **Statistical modelling** of data - R makes this easy.
+-  Developing **reproducible data tools** for others in academia and the private sector.
+
+![](jack-gramsper.png)
+
+## Who are we?
+
+**Jack Davison**
+
+I also use R extensively for data visualisation!
+
+![](jack-tt_banner.png)
 
 ## Who are we?
 
