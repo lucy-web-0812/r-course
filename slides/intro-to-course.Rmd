@@ -73,6 +73,8 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 - RStudio certified `tidyverse` instructor
 - Work involves extracting insight from large data sets
 
+## Who are we?
+
 **Will Drysdale**
 
 - Postdoc working with James Lee, previously did PhD in WACL
