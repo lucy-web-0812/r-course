@@ -75,7 +75,7 @@ I use R for:
 -  **Statistical modelling** of data - R makes this easy.
 -  Developing **reproducible data tools** for others in academia and the private sector.
 
-![](jack-gramsper.png)
+![](images/jack-gramsper.png)
 
 ## Who are we?
 
@@ -83,7 +83,7 @@ I use R for:
 
 I also use R extensively for data visualisation!
 
-![](jack-tt_banner.png)
+![](images/jack-tt_banner.png)
 
 ## Who are we?
 
