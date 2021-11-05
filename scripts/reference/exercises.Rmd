@@ -1,0 +1,44 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Day 1
+
+## Intro to R
+
+-  No activity, just encourage folks to go along with us, get comfortable
+-  Still have short break
+
+## Reading Data
+
+-  Read in some data and plot (e.g.) nox:co2 over time 
+  - Date in different format to example
+  - Nox:CO2 needs calculating/adding w/ mutate
+
+## Basic Stats
+
+-  Get the Nox/CO2 gradient from earlier data
+-  Calculate the mean NOx:CO2
+
+## openair
+
+-  Open ended, go through openair manual, try out some of the plots that sound cool!
+
+# Day 2
+
+## Reading many data
+
+- Same data as yesterday, but Read it in with a loop!
+  
+## Manipulation
+
+- Use data, pivot longer, find mean and sd; find the max and min values for each species
+
+## ggplot
+
+- Plot something with the data you've got
+
+## final exercise
+
+-  Large, open ended exercise.

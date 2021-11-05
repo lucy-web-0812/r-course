@@ -42,7 +42,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 3.  Select **base**.
 
-4.  Click **Download R #version# for Windows**.
+4.  Click **Download R 4.1.2 for Windows**.
 
 5.  **Run the .exe** to install R.
 
@@ -56,7 +56,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 4.  Select **RStudio Desktop – Open Source License** (Free option).
 
-5.  Select **RStudio #version# - Windows**.
+5.  Select **RStudio - Windows**.
 
 6.  **Run the .exe** to install RStudio.
 
