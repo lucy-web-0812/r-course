@@ -31,9 +31,9 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 *A course over two afternoons for beginners with R*
 
 - Introduction to R, RStudio and Programming for beginners
-- Building a script - reading, manipulating and visualising data
-- Using the `openair` package for processing air quality data
-- More advanced tips & tricks to solve common problems in atmospheric science
+- Building a script; the benefits of programming over spreadsheets 
+- Reading, manipulating and visualising data, with tips and tricks to solve common problems
+- Chance to practise skills with us on hand to help out
 
 ## Approaches
 
@@ -54,7 +54,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 - Introduction to R for Air Quality Data
   - Getting familiar with R and RStudio
   - Reading and interrogating data within R
-  - Statistical analysis of data
+  - Introducing statistical analysis; averages and trend lines
   - Using `openair` for air quality data analysis
   
 **Friday 12th November, 13:00-17:00**
@@ -63,7 +63,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
   - Reading and combining multiple data streams
   - Further data handling; reshaping, grouping and summarising
   - Making publication standard visualisations with `ggplot2`
-  - Time to talk about and respond to own data challenges
+  - Big task; analysis of real timeseries data
 
 ## Who are we?
 
@@ -91,7 +91,7 @@ I also use R extensively for data visualisation!
 
 - Postdoc working with James Lee, previously did PhD in WACL
 - Long time R user and trainer in WACL
-- Work invovles a lot of timeseries and flux analysis
+- Work involves a lot of time series and flux analysis
 
 ## Who are you?
 
@@ -100,7 +100,7 @@ I also use R extensively for data visualisation!
 - What is your name?
 - What do you do?
 - What kind of data do you use?
-  - Big? Small? From the lab? Fieldwork? Modelled? Time-series?
+  - Big? Small? From the lab? Fieldwork? Modelled? Time-series? Categorical?
 - What are you hoping to get out of these sessions?
 
 ## Further Help
