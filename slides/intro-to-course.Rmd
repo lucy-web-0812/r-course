@@ -59,11 +59,11 @@ knitr::knit_hooks$set(chunk = function(x, options) {
   
 **Friday 12th November, 13:00-17:00**
 
-- Further uses of R for data handling
+- Further uses of R in Data Science
   - Reading and combining multiple data streams
   - Further data handling; reshaping, grouping and summarising
   - Making publication standard visualisations with `ggplot2`
-  - Big task; analysis of real timeseries data
+  - Real world data project
 
 ## Who are we?
 
