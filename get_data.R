@@ -81,3 +81,39 @@ dat_final = dat %>%
   mutate(data = mutate(data,no = ifelse(no == -99999,"missing",no)) %>% list())
 
 walk2(dat_final$data,dat_final$code,~write.csv(.x,here("data","part_2",paste0(.y,"_2018.csv"))))
+
+
+# Cape Verde --------------------------------------------------------------
+
+cape_verde = read.csv("data/cape_verde_raw.csv") |> 
+  tibble() |> 
+  filter(year != 2006) |> 
+  mutate(Flag_name = if_else(Flag_name == "", NA_character_, Flag_name) |> 
+           zoo::na.locf()) |> 
+  rename(date_time = 1)
+
+write.csv(cape_verde, file = "data/cape_verde.csv",row.names = F)
+
+
+# exercise data ----------------------------------------------------------------
+
+aberdeen_raw = importAURN("ABD8", year = 1990:2020)
+
+aberdeen = aberdeen_raw %>%
+  filter(lubridate::year(date) >= 2019) %>%
+  select(-site, -code) %>%
+  mutate(year = lubridate::year(date),
+         month = lubridate::month(date),
+         day = lubridate::day(date)) %>%
+  separate(date, c("date", "time"), sep = " ") %>%
+  mutate(date = glue::glue("{month}-{day}-{year} {time}")) %>%
+  select(-time, -month, -day, -year, -nox)
+
+aberdeen_no2 = select(aberdeen, date, no2)
+aberdeen_no = select(aberdeen, date, no)
+aberdeen_met = select(aberdeen, -(no2:no))
+
+write_csv(aberdeen_no2, "data/exercises/aberdeen_no2.csv")
+write_csv(aberdeen_no, "data/exercises/aberdeen_no.csv")
+write_csv(aberdeen_met, "data/exercises/aberdeen_met.csv")
+
