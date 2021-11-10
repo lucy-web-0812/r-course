@@ -124,9 +124,12 @@ I also use R in many other aspects of my work:
 
 ## Further Help
 
-- Learning R does not finish at the end of this short course
-  - There are many R users in WACL who are happy to help, including ourselves.
-  - There are lots of resources online that we'll point you to.
-  - WACL has a programming Slack channel for help with R & Python.
+**Learning R does not finish at the end of this short course**
+
+- There are many R users in WACL who are happy to help, including ourselves.
+
+- There are lots of resources online that we'll point you to.
+
+- WACL has a programming Slack channel for help with R & Python.
 
 - If there is interest, we'll look to do shorter sessions on more specific problems
