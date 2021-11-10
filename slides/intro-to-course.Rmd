@@ -89,9 +89,28 @@ I also use R extensively for data visualisation!
 
 **Will Drysdale**
 
-- Postdoc working with James Lee, previously did PhD in WACL
-- Long time R user and trainer in WACL
-- Work involves a lot of time series and flux analysis
+I use R for:
+
+- **Eddy Covariance** - processing of high time resolution data (5 - 20 Hz) to calculate emissions using _eddy4R_
+  - Perform analysis **automatically** and **reproducibly**
+  - **Collaborate** with developers to add our own tools
+
+![](images/will_ec.png)
+
+## Who are we?
+
+**Will Drysdale**
+
+I also use R in many other aspects of my work:
+
+- **Instrument data** work up
+
+- Producing **Figures**
+
+- **Mapping** spatial data
+
+![](images/will_slide2.png)
+
 
 ## Who are you?
 
