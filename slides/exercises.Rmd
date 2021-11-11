@@ -79,9 +79,9 @@ library(dplyr)
 
 ## Data Manipulation
 
-**"Tidy" your data using `pivot_longer()`, then find the mean and standard deviation of each pollutant, as well as the time at which each peaks maximum value of each.**
+**"Tidy" your data using `pivot_longer()`, then find the mean and standard deviation of each pollutant using `dplyr`. Also find the hour at which each pollutant peaks in the data frame.**
 
--  You'll not be able to do work out the mean/sd and the time at the same time - think about how you structure your script to avoid repeitition.
+-  You'll not be able to work out the mean/sd *and* find the time at which the pollutants peak in the same pipeline; think about how you structure your script to avoid repetition.
 
 -  You could also use `mutate()` and `lubridate` to get an average *per year*.
 
@@ -149,7 +149,7 @@ library(dplyr)
 
 ## Summary
 
-**Read in the data and attempt any of Challenges 1, 2 or 3.
+**Read in the data and attempt any of Challenges 1, 2 or 3.**
 
 -  (**Challenge 0:** Read in the data, fixing any issues.)
 
