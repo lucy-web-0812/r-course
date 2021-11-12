@@ -220,7 +220,6 @@ df_daily_long %>%
   geom_line() +
   facet_grid(site~species, scales = "free") # or use grid!
 
-
 df_daily_long %>%
   ggplot() +
   aes(x = date, y = conc, color = site) +
@@ -245,7 +244,6 @@ df_daily_long %>%
   theme(legend.position = "top") +
   labs(x = "Date", y = "Concentration (ppb)", color = "Site") 
 # this might be far too weird and advanced, but parse the labels
-
 
 # other plot types...
 
@@ -295,8 +293,6 @@ df %>%
   theme_bw() +
   labs(x = quickText("NOx (ppb)"), color = "Site Code") +
   theme(legend.position = "top")
-
-
 
 # Other tidyverse packages --------------------------------------------------------
 
