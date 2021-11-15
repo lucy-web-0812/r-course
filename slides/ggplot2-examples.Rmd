@@ -31,6 +31,7 @@ The data used in this document is the same as the data used in the taught portio
 
 library(tidyverse)
 library(openair)
+library(lubridate)
 
 sites = list.files(path = "C:/Users/jd6th/Documents/course_data/data_taught/data_day_2/", pattern = ".csv") %>% 
   str_remove("_2018.csv")
@@ -136,5 +137,23 @@ df %>%
   theme_bw() +
   labs(x = quickText("NOx (ppb)"), color = "Site Code") +
   theme(legend.position = "top")
+```
+
+## Pixel Plot
+
+```{r}
+datRaster = dat_long %>%
+  mutate(day = yday(date),
+         h = hour(date)) %>% 
+  select(-date) %>% 
+  group_by(day,h, site,poll) %>% 
+  summarise_all(mean, na.rm = T)
+
+datRaster %>% 
+  filter(site == "MY1", poll != "o3") %>% 
+  ggplot()+
+  geom_raster(aes(day, h, fill = conc), interpolate = T)+
+  facet_wrap(~poll, ncol = 1)+
+  scale_fill_viridis_c()
 ```
 
