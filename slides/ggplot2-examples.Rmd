@@ -141,19 +141,38 @@ df %>%
 
 ## Pixel Plot
 
+Colour map showing the hourly concentrations of three pollutants
+
 ```{r}
-datRaster = dat_long %>%
+datRaster = df_long %>%
   mutate(day = yday(date),
          h = hour(date)) %>% 
   select(-date) %>% 
-  group_by(day,h, site,poll) %>% 
+  group_by(day,h, site,species) %>% 
   summarise_all(mean, na.rm = T)
 
 datRaster %>% 
-  filter(site == "MY1", poll != "o3") %>% 
+  filter(site == "MY1", species != "o3") %>% 
   ggplot()+
   geom_raster(aes(day, h, fill = conc), interpolate = T)+
-  facet_wrap(~poll, ncol = 1)+
-  scale_fill_viridis_c()
+  facet_wrap(~species, ncol = 1)+
+  scale_fill_viridis_c()+
+  theme_light()
 ```
 
+## Violin/Histograms
+
+Overlaid violin and histograms per site, on a log y axis.
+
+```{r}
+df_long %>%
+  ggplot(aes(x = site, y = conc)) +
+  geom_boxplot(aes(color = site))+
+  geom_violin(alpha = .5, fill = NA)+
+  facet_wrap(~species, scales = "free_y")+
+  scale_y_log10()+
+  theme_light() +
+  labs(x= "Site", y= "Concentration")+
+  theme(legend.position = "none")
+
+```
