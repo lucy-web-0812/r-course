@@ -123,7 +123,7 @@ library(dplyr)
 
 -  By the end, these should be plotted per airmass history (`Flag_name` column).
 
--  To start, try plotting with `openair::timeAverage()` to see what they should look like.
+-  To start, try plotting with `openair::timeVariation()` to see what they should look like.
 
 -  Can you recreate the `openair` plot using `dplyr` and `ggplot2`?
 
