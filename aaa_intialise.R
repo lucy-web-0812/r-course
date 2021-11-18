@@ -16,7 +16,7 @@ if(!dir.exists(here("data","exercise"))){
 
 # Other Folders -----------------------------------------------------------
 
-for (dir in c("planning", "slides", "reference")) {
+for (dir in c("planning", "learning_materials", "reference")) {
   if(!dir.exists(here(dir))){
     dir.create(here(dir), recursive = T)
   }
