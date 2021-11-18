@@ -17,7 +17,6 @@ add_bad_flag = function(df){
 
 # -------------------------------------------------------------------------
 
-
 if(!dir.exists(here("data"))){ # if dirs haven't been set up, do that
   source(here("aaa_intialise.R"))
 }
@@ -48,7 +47,7 @@ my1_met = my1 %>%
 
 walk2(my1_pol_list,spec,~write.csv(.x,here("data","part_1",paste0("MY1_",.y,"_2018.csv")),row.names = F))
 
-write.csv(my1_met,here("data","part_1","MY1_met_2018.csv"))
+write.csv(my1_met,here("data","taught", "part_1", "MY1_met_2018.csv"))
 
 
 # Part 2 ------------------------------------------------------------------
@@ -80,23 +79,11 @@ dat_final = dat %>%
   rowwise() %>% 
   mutate(data = mutate(data,no = ifelse(no == -99999,"missing",no)) %>% list())
 
-walk2(dat_final$data,dat_final$code,~write.csv(.x,here("data","part_2",paste0(.y,"_2018.csv"))))
+walk2(dat_final$data,dat_final$code,~write.csv(.x,here("data","taught", "part_2",paste0(.y,"_2018.csv"))))
 
+# Exercise Data ----------------------------------------------------------------
 
-# Cape Verde --------------------------------------------------------------
-
-cape_verde = read.csv("data/cape_verde_raw.csv") |> 
-  tibble() |> 
-  filter(year != 2006) |> 
-  mutate(Flag_name = if_else(Flag_name == "", NA_character_, Flag_name) |> 
-           zoo::na.locf()) |> 
-  rename(date_time = 1)
-
-write.csv(cape_verde, file = "data/cape_verde.csv",row.names = F)
-
-
-# exercise data ----------------------------------------------------------------
-
+## NB: this is a roadside site
 aberdeen_raw = importAURN("ABD8", year = 1990:2020)
 
 aberdeen = aberdeen_raw %>%
@@ -113,7 +100,18 @@ aberdeen_no2 = select(aberdeen, date, no2)
 aberdeen_no = select(aberdeen, date, no)
 aberdeen_met = select(aberdeen, -(no2:no))
 
-write_csv(aberdeen_no2, "data/exercises/aberdeen_no2.csv")
-write_csv(aberdeen_no, "data/exercises/aberdeen_no.csv")
-write_csv(aberdeen_met, "data/exercises/aberdeen_met.csv")
+write_csv(aberdeen_no2, here("data", "exercise", "aberdeen_no2.csv"))
+write_csv(aberdeen_no,  here("data", "exercise", "aberdeen_no.csv"))
+write_csv(aberdeen_met, here("data", "exercise", "aberdeen_met.csv"))
 
+
+# Cape Verde --------------------------------------------------------------
+
+cape_verde = read.csv(here("data", "cape_verde_raw.csv")) |> 
+  tibble() |> 
+  filter(year != 2006) |> 
+  mutate(Flag_name = if_else(Flag_name == "", NA_character_, Flag_name) |> 
+           zoo::na.locf()) |> 
+  rename(date_time = 1)
+
+write.csv(cape_verde, file = here("data", "cape_verde.csv"), row.names = F)
