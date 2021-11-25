@@ -1,3 +1,6 @@
+
+PRACTICALITIES OF THE DAY
+
 Remember to bring extension cables from WACL; not all rooms have many sockets and some very large rooms have surprisingly few.
 
 Try to book rooms well in advance to secure one with proper tables, and not just chairs with the side tables attached.
@@ -5,3 +8,54 @@ Try to book rooms well in advance to secure one with proper tables, and not just
 Bring snacks.
 
 Teas and coffees can be sorted by Jenny, but do remember to bring milk from WACL and encourage attendees to bring mugs.
+
+
+EXERCISES
+
+Attendees appreciated exercises - good to dedicate time to these.
+
+However - encourage attendees to open a new script for the exercises and name exercise data something different!
+
+When demonstrating name it something different - don't call everything "dat".
+
+
+PACE / DELIVERY
+
+60% said about right, 40% too fast. This is a significant amount of people! (4 / 10 responders).
+
+Feedback: Not enough time to write "notes". Potential solution - comment our code as we go, e.g., when using a function for the first time. Then send round the up-to-date script in the breaks (put in drive).
+
+Feedback: loops a bit too quick. Potential solution - maybe do more messy data on the first day but only reading one file, and then read in multiple, less messy files second day so less going on. and/or build up to loops more gradually - e.g., numeric stuff in them before reading data.
+
+Feedback: typed too quickly. Fix: just be more aware of the little things that you're doing. Maybe tidy up the reference notes and make available to learners - not to read from during course, but to catch up if needed. Also share scripts throughout day too.
+
+Feedback: Scratch and main script confusing. Fix: Either be more consistent in their use, or use the good script consistently. OR... Rather than do too much scratch, maybe show the data first and make it clear what we are going to be doing to avoid needing to do a load of exploratory "scratch" stuff in the scripts.
+
+Make sure that everyone's on the same page (more stopping points?)
+
+Feedback: RProjects? Fix: Not clear what is meant by this, but potentiall a good take-away is to talk about folder structure. First thing to do could be set up a directory, download data, put in "data" folder, etc. - also write to "output" folder. Teaches good practice for project management in not a lot of time.
+
+Feedback: Shorcuts - multiple people said they liked them, one person did not. Fix: really labour the use of shortcuts, show the shortcut menu in RStudio.
+
+
+FORMAT
+
+It was too quick - we ran out of time both days, so some restructuring needed. Ideas:
+
+1. Split openair to its own session (run by David Carslaw?).
+
+2. Do one full day and one half day? Or two six hour days?
+
+3. Pull opeanir and ggplot2 out, and do a ggplot2 visualisation course separate (still part of it).
+
+Potential Structure:
+
+TWO FULL DAYS
+
+DAY 1
+AM - Intro to presenters/learners, Intro to R(Studio), Reading Data
+PM - Finish Reading, Base Stats, Openair
+
+DAY 2
+AM - "Hard Reading" (loops, etc.), Tidyverse
+PM - ggplot2, (+ cape verde exercise?)
