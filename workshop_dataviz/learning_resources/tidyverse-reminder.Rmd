@@ -1,0 +1,253 @@
+---
+title: "`Tidyverse` Recap"
+author: "Will Drysdale & Jack Davison"
+date: "12/11/2021"
+output:
+  rmdformats::downcute:
+    highlight: tango
+    number_sections: false
+    lightbox: false
+    gallery: true
+    cards: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c("top", "right"), color = "white")
+```
+
+# Introduction
+
+This document has been written to remind you of the key `{dplyr}` and `{tidyr}` functions that you'll need for the Data Visualisation workshop. **Don't forget to load your packages:**
+
+```{r pckg}
+library(dplyr)
+library(tidyr)
+```
+
+Here we'll use the `starwars` dataset that is built into dplyr. Have a look at it before we get started:
+
+```{r starwars}
+starwars
+```
+
+You may even choose to save it to your global environment as something less wordy. I'm going to save it as `sw`.
+
+```{r save-starwars}
+sw <- starwars
+```
+
+Remember that a key feature of the `{tidyverse}` is the use of the **pipe** (`%>%`). It pipes whatever is on the left-hand side of it into the first argument of the right-hand side. The following two expressions are therefore the same:
+
+```{r pipe, eval = F}
+
+head(as.data.frame(sw))
+# ...is the same as...
+sw %>% as.data.frame() %>% head()
+
+```
+
+# `select()` and `filter()`: Subsetting Data
+
+## `select()` is for columns
+
+`select()` is a `dplyr` function which allows for you to **select specific columns**. There are lots of reasons you might want to do this, but commonly it'll just be to make your data easier to handle.
+
+We can select a single column...
+
+```{r select1}
+# return only the name column
+sw %>% select(name)
+```
+
+...or multiple columns.
+
+```{r select2}
+# return every column between "name" and "birth_year", as well as "homeworld"
+sw %>% select(name:birth_year, homeworld)
+```
+
+We could select by names...
+
+```{r select3}
+# return every column that starts with "s"
+sw %>% select(starts_with("s"))
+```
+
+...or data types.
+
+```{r select4}
+# return all "character" columns
+sw %>% select(where(is.character))
+```
+
+We can even *de*select things using the minus (`-`) symbol.
+
+```{r select5}
+# remove all columns between "name" and "birth_year"
+sw %>% select(-(name:birth_year))
+```
+
+## `filter()` is for rows
+
+`filter()` is a `dplyr` function which allows you to **extract certain rows using logical expressions**. Recall common logical operators; equals (`==`), greater than (`>`), less than (`<`), their "or equal to" equivalents (`<=`, `>=`), and the "not" modifier (`!`).
+
+We can filter by one expression...
+
+```{r filter1}
+# return all rows where species is equal to human
+sw %>% filter(species == "Human")
+```
+
+...or multiple.
+
+```{r filter2}
+# return all rows where species is equal to human, the height is over 190m, and the eyes AREN'T brown
+sw %>% filter(species == "Human", height > 190, eye_color != "brown")
+```
+
+Remember that `filter()` can be used with `group_by()` to filter *by group*. For example, the below expression finds the heaviest character of each gender.
+
+```{r filter3}
+# return the rows for each gender where mass is the greatest (i.e., heaviest character of each gender)
+sw %>% 
+  group_by(gender) %>% 
+  filter(mass == max(mass, na.rm = T))
+```
+
+Another useful tool is `%in%`, that behaves like equals but for multiple values.
+
+```{r filter4}
+# return all rows where sex is "male" OR "none"
+sw %>% filter(sex %in% c("male", "none"))
+```
+
+# `mutate()` and `summarise()`: Making Calculations
+
+## `mutate()` changes or adds columns
+
+`mutate()` is a `dplyr` function which operates on columns, using the syntax `new_name = function(current_name)`. This will likely be the function you use the most for performing calculations.
+
+It can create new columns...
+
+```{r mutate1}
+# create a column for the ratio of height over mass
+sw %>% mutate(mass_height_ratio = height / mass) %>% select(height, mass, mass_height_ratio)
+```
+
+...or change existing ones.
+
+```{r mutate2}
+# convert mass from kg to g.
+sw %>% mutate(mass = mass*1000)
+```
+
+It can also do both at once. 
+
+```{r mutate3}
+# convert mass from kg to g, then create the ratio column of height:mass
+sw %>% 
+  mutate(mass = mass*1000,
+         mass_height_ratio = height / mass) %>% 
+  select(height, mass, mass_height_ratio)
+```
+
+Remember that it works with `group_by()`, allowing you to add - for example - averages *per group*. Notice in the below example the repeated values of 177 and 131 depending on whether the character is a human or droid.
+
+```{r mutate4}
+# create a column of the average height across the species
+sw %>% 
+  select(name, height, species) %>% 
+  group_by(species) %>% 
+  mutate(avg_species_height = mean(height, na.rm = T))
+```
+
+## `summarise()` collapses dataframes
+
+`summarise()` is a `dplyr` function which is very similar to `mutate()`, but instead of retaining the rest of your data it collapses it down to only to grouping and calculated variables. It is almost always used in conjunction with `group_by()`, and is useful for calculating statistical summaries of data sets.
+
+We can summarise one statistic...
+
+```{r summarise1}
+# return the mean height for each species
+sw %>% 
+  group_by(species) %>% 
+  summarise(height = mean(height, na.rm = T))
+```
+
+... or multiple statistics.
+
+```{r summarise2}
+# return the mean height and mass of each species, as well as the number of each in the data (n())
+sw %>% 
+  group_by(species) %>% 
+  summarise(height = mean(height, na.rm = T),
+            mass = mean(mass, na.rm = T),
+            n = n())
+```
+
+Remember that we can `group_by()` multiple things.
+
+```{r groupby}
+# count the number of characters in each sex-gender pair
+sw %>% 
+  group_by(sex, gender) %>% 
+  summarise(n = n())
+```
+
+
+# `pivot_longer()` and `pivot_wider()`: Reshaping Data
+
+One of the most alien things for new R users is *data reshaping*, achieved using the `pivot_*()` functions from `{tidyr}`. Data reshaping is a conceptually challenging thing to learn, but is one of the most valuable things you can do in R to enhance the efficiency and flexibility of your code.
+
+## `pivot_longer()` stacks data
+
+`pivot_longer()` takes multiple columns and stacks them on top of each other. There are lots of reasons for wanting to do this - often either for plotting in `{ggplot2}` or calculating efficient summary tables using `{dplyr}`.
+
+For sake of example, let's say we want to combine all of the "color" columns into one. Currently, there are separate columns for hair, skin and eye.
+
+```{r pivot-intro}
+sw %>% select(name, contains("color"))
+```
+
+`pivot_longer()` can "stack" them - examine the below code and try to understand what is being done. The key argument that `pivot_longer()` are the columns to stack on top of each other (here a selecting function is used). The column names enter the name column (here renamed to "feature") and the column values enter the values column (here renamed to "colour").
+
+```{r pivotlong}
+sw %>% 
+  select(name, contains("color")) %>% 
+  pivot_longer(contains("color"), names_to = "feature", values_to = "colour")
+```
+
+## `pivot_wider()` spreads data
+
+`pivot_wider()` does the opposite to `pivot_longer()` - "spreading" a single column over multiple columns. There are perhaps fewer reasons why you might want to do this, but "wide" data is often desirable outside of the `{tidyverse}` - correlation matrices, `{openair}`, and some models all prefer "wide" data. Our `starwars` data isn't really suited to demonstrate `pivot_wider()`, but let's say that we want to restructure it so that, instead of having "gender" be one column, we want two logical columns to know whether the character presents as masculine, feminine or neither.
+
+First, consider the relevant columns - the character name (which can be used as an ID column) and the gender. The gender column will become the names of our new columns, but we'll need values to inhabit these new columns. For this, we'll `mutate()` the value `TRUE`.
+
+```{r pivotwide1}
+sw %>% 
+  select(name, species, gender) %>% 
+  mutate(val = TRUE)
+```
+
+Now we can use `pivot_wider()`, specifying that we want the contents of the "gender" column to become the names of the new data frame and the contents of the new "val" column to become the values. As a gender of `NA` effectively means "neither masculine nor feminine" we can drop that column.
+
+```{r pivotwide2}
+sw %>% 
+  select(name, gender) %>% 
+  mutate(val = TRUE) %>% 
+  pivot_wider(names_from = gender, values_from = val, values_fill = FALSE) %>% 
+  select(-`NA`)
+```
+
+
+# Conclusion
+
+The `{tidyverse}` has a lot more in it that has been covered here, but hopefully this has been a useful recap of what will be needed in the `{ggplot2}` workshop.
+
+If you want to learn more about using the `{tidyverse}`, we'd recommend "R for Data Science", which can be found here: [R4DS](https://r4ds.had.co.nz/).
