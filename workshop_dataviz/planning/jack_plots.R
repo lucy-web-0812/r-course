@@ -20,12 +20,17 @@ tsdata %>%
 
 # density functions
 
-avgdata %>% 
+avgdata %>%
+  mutate(name = toupper(name)) %>% 
   ggplot(aes(x = mean)) +
   geom_density(aes(lty = theYear, color = name)) +
   scale_x_continuous(limits = c(0,100)) +
   scale_linetype_manual(values = c("2015 - 2019" = "dashed", "2020" = "solid")) +
-  theme_classic()
+  theme_classic() +
+  theme(legend.position = "top", 
+        legend.box = "vertical",
+        legend.margin = margin()) +
+  labs(color = "Species", lty = "Years")
 
 # boxplots
 
