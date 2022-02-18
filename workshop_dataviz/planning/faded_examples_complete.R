@@ -6,9 +6,6 @@ library(tidyverse)
 avgdata = read_csv(here::here("workshop_dataviz/data/historicalAverageData.csv"))
 tsdata = read_csv(here::here("workshop_dataviz/data/timeSeriesData.csv"))
 
-avgdata
-tsdata
-
 # ggplot, geom_* -----------------------------------------------------
 
 tsdata %>% 
@@ -83,19 +80,75 @@ avgdata %>%
   geom_col(position = position_dodge()) +
   scale_fill_brewer(palette = "Set1")
 
-
 # facets ------------------------------------------------------------------
 
+codes = c("lu0101a", "lu0102a", "ch0010a", "ch0011a", "MY1", "KC1")
+
 tsdata %>% 
-  filter(code %in% c("MY1", "KC1")) %>% 
-  select(-median) %>% 
-  pivot_wider(names_from = name, values_from = mean) %>% 
+  filter(code %in% codes) %>%
+  pivot_longer(mean:median, names_to = "stat") %>% 
+  pivot_wider(names_from = name, values_from = value) %>% 
   ggplot(aes(x = o3, y = no2)) +
   geom_point(aes(color = code)) +
   geom_smooth(method = "lm", aes(group = code)) +
   scale_x_continuous(name = "Ozone", limits = c(0, NA)) +
-  scale_y_continuous(name = "Nitrogen Dioxide", limits = c(0, NA))
+  scale_y_continuous(name = "Nitrogen Dioxide", limits = c(0, NA)) +
+  facet_wrap(~country)
+
+avgdata %>% 
+  filter(country %in% c("united_kingdom", "france", "switzerland")) %>% 
+  ggplot(aes(x = mean, color = theYear, fill = theYear)) +
+  geom_density(alpha = .3, size = 1) +
+  scale_color_manual(values = c("darkgreen", "darkblue")) +
+  scale_fill_manual(values = c("darkgreen", "darkblue")) +
+  facet_grid(country~name, scales = "free")
+
+avgdata %>% 
+  group_by(country, theYear, name) %>% 
+  summarise(country_avg = mean(mean)) %>% 
+  ggplot(aes(y = country, x = country_avg, fill = theYear)) +
+  geom_col(position = position_dodge()) +
+  scale_fill_brewer(palette = "Set1") +
+  scale_x_continuous(name = NULL) +
+  theme(strip.placement = "outside") +
+  facet_wrap(~name, scales = "free_x", strip.position = "bottom") +
+  NULL
 
 # theme -------------------------------------------------------------------
 
+plt1 = tsdata %>% 
+  filter(code %in% codes) %>%
+  pivot_longer(mean:median, names_to = "stat") %>% 
+  pivot_wider(names_from = name, values_from = value) %>% 
+  ggplot(aes(x = o3, y = no2)) +
+  geom_point(aes(color = code)) +
+  geom_smooth(method = "lm", aes(group = code)) +
+  scale_x_continuous(name = "Ozone", limits = c(0, NA)) +
+  scale_y_continuous(name = "Nitrogen Dioxide", limits = c(0, NA)) +
+  facet_wrap(~country) +
+  theme_light() +
+  theme(legend.position = "none")
 
+plt2 = avgdata %>% 
+  filter(country %in% c("united_kingdom", "france", "switzerland")) %>% 
+  ggplot(aes(x = mean, color = theYear, fill = theYear)) +
+  geom_density(alpha = .3, size = 1) +
+  scale_color_manual(values = c("darkgreen", "darkblue")) +
+  scale_fill_manual(values = c("darkgreen", "darkblue")) +
+  facet_grid(country~name, scales = "free") +
+  theme_light() +
+  theme(legend.position = "top")
+
+plt3 = avgdata %>% 
+  group_by(country, theYear, name) %>% 
+  summarise(country_avg = mean(mean)) %>% 
+  ggplot(aes(y = country, x = country_avg, fill = theYear)) +
+  geom_col(position = position_dodge()) +
+  scale_fill_brewer(palette = "Set1") +
+  scale_x_continuous(name = NULL) +
+  facet_wrap(~name, scales = "free_x", strip.position = "bottom") +
+  theme_light() +
+  theme(legend.position = "top", 
+        strip.placement = "outside",
+        strip.text = element_text(color = "black"),
+        strip.background = element_blank())
