@@ -1,5 +1,6 @@
 
 library(tidyverse)
+library(patchwork)
 
 # read data ---------------------------------------------------------------
 
@@ -8,7 +9,7 @@ tsdata = read_csv(here::here("workshop_dataviz/data/timeSeriesData.csv"))
 
 # ggplot, geom_* -----------------------------------------------------
 
-tsdata %>% 
+s1 = tsdata %>% 
   filter(code == "MY1") %>% 
   select(-median) %>% 
   pivot_wider(names_from = name, values_from = mean) %>% 
@@ -16,13 +17,13 @@ tsdata %>%
   geom_point() +
   geom_smooth(method = "lm")
 
-avgdata %>% 
+d1 = avgdata %>% 
   filter(country == "united_kingdom",
          name == "no2") %>% 
   ggplot(aes(x = mean)) +
   geom_density()
 
-avgdata %>% 
+b1 = avgdata %>% 
   group_by(country, theYear, name) %>% 
   summarise(country_avg = mean(mean)) %>% 
   filter(name == "no2", country == "united_kingdom") %>% 
@@ -31,7 +32,7 @@ avgdata %>%
 
 # aes ---------------------------------------------------------------------
 
-tsdata %>% 
+s2 = tsdata %>% 
   filter(code %in% c("MY1", "KC1")) %>% 
   select(-median) %>% 
   pivot_wider(names_from = name, values_from = mean) %>% 
@@ -39,13 +40,13 @@ tsdata %>%
   geom_point(aes(color = code)) +
   geom_smooth(method = "lm", aes(group = code))
 
-avgdata %>% 
+d2 = avgdata %>% 
   filter(country == "united_kingdom",
          name == "no2") %>% 
   ggplot(aes(x = mean, color = theYear, fill = theYear)) +
   geom_density(alpha = .3)
 
-avgdata %>% 
+b2 = avgdata %>% 
   group_by(country, theYear, name) %>% 
   summarise(country_avg = mean(mean)) %>% 
   filter(name == "no2") %>% 
@@ -54,7 +55,7 @@ avgdata %>%
 
 # scales & labels ---------------------------------------------------------
 
-tsdata %>% 
+s3 = tsdata %>% 
   filter(code %in% c("MY1", "KC1")) %>% 
   select(-median) %>% 
   pivot_wider(names_from = name, values_from = mean) %>% 
@@ -64,7 +65,7 @@ tsdata %>%
   scale_x_continuous(name = "Ozone", limits = c(0, NA)) +
   scale_y_continuous(name = "Nitrogen Dioxide", limits = c(0, NA))
 
-avgdata %>% 
+d3 = avgdata %>% 
   filter(country == "united_kingdom",
          name == "no2") %>% 
   ggplot(aes(x = mean, color = theYear, fill = theYear)) +
@@ -72,7 +73,7 @@ avgdata %>%
   scale_color_manual(values = c("darkgreen", "darkblue")) +
   scale_fill_manual(values = c("darkgreen", "darkblue"))
 
-avgdata %>% 
+b3 = avgdata %>% 
   group_by(country, theYear, name) %>% 
   summarise(country_avg = mean(mean)) %>% 
   filter(name == "no2") %>% 
@@ -84,7 +85,7 @@ avgdata %>%
 
 codes = c("lu0101a", "lu0102a", "ch0010a", "ch0011a", "MY1", "KC1")
 
-tsdata %>% 
+s4 = tsdata %>% 
   filter(code %in% codes) %>%
   pivot_longer(mean:median, names_to = "stat") %>% 
   pivot_wider(names_from = name, values_from = value) %>% 
@@ -95,7 +96,7 @@ tsdata %>%
   scale_y_continuous(name = "Nitrogen Dioxide", limits = c(0, NA)) +
   facet_wrap(~country)
 
-avgdata %>% 
+d4 = avgdata %>% 
   filter(country %in% c("united_kingdom", "france", "switzerland")) %>% 
   ggplot(aes(x = mean, color = theYear, fill = theYear)) +
   geom_density(alpha = .3, size = 1) +
@@ -103,7 +104,7 @@ avgdata %>%
   scale_fill_manual(values = c("darkgreen", "darkblue")) +
   facet_grid(country~name, scales = "free")
 
-avgdata %>% 
+b4 = avgdata %>% 
   group_by(country, theYear, name) %>% 
   summarise(country_avg = mean(mean)) %>% 
   ggplot(aes(y = country, x = country_avg, fill = theYear)) +
@@ -116,7 +117,7 @@ avgdata %>%
 
 # theme -------------------------------------------------------------------
 
-plt1 = tsdata %>% 
+s5 = tsdata %>% 
   filter(code %in% codes) %>%
   pivot_longer(mean:median, names_to = "stat") %>% 
   pivot_wider(names_from = name, values_from = value) %>% 
@@ -129,7 +130,7 @@ plt1 = tsdata %>%
   theme_light() +
   theme(legend.position = "none")
 
-plt2 = avgdata %>% 
+d5 = avgdata %>% 
   filter(country %in% c("united_kingdom", "france", "switzerland")) %>% 
   ggplot(aes(x = mean, color = theYear, fill = theYear)) +
   geom_density(alpha = .3, size = 1) +
@@ -139,7 +140,7 @@ plt2 = avgdata %>%
   theme_light() +
   theme(legend.position = "top")
 
-plt3 = avgdata %>% 
+b5 = avgdata %>% 
   group_by(country, theYear, name) %>% 
   summarise(country_avg = mean(mean)) %>% 
   ggplot(aes(y = country, x = country_avg, fill = theYear)) +
@@ -152,3 +153,5 @@ plt3 = avgdata %>%
         strip.placement = "outside",
         strip.text = element_text(color = "black"),
         strip.background = element_blank())
+
+(s1 / s2 / s3 / s4 / s5) | (d1 / d2 / d3 / d4 / d5) | (b1 / b2 / b3 / b4 / b5)
