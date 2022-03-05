@@ -136,7 +136,7 @@ d5 = avgdata %>%
   geom_density(alpha = .3, size = 1) +
   scale_color_manual(values = c("darkgreen", "darkblue")) +
   scale_fill_manual(values = c("darkgreen", "darkblue")) +
-  facet_grid(country~name, scales = "free") +
+  facet_grid(country~toupper(name), scales = "free") +
   theme_light() +
   theme(legend.position = "top")
 
