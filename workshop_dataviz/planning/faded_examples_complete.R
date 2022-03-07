@@ -1,6 +1,7 @@
 
 library(tidyverse)
 library(patchwork)
+library(here)
 
 # read data ---------------------------------------------------------------
 
@@ -155,3 +156,21 @@ b5 = avgdata %>%
         strip.background = element_blank())
 
 (s1 / s2 / s3 / s4 / s5) | (d1 / d2 / d3 / d4 / d5) | (b1 / b2 / b3 / b4 / b5)
+
+
+
+allPlots = list(s1 = s1, s2 = s2, s3 = s3, s4 = s4, s5 = s5, 
+                d1 = d1, d2 = d2, d3 = d3, d4 = d4, d5 = d5,
+                b1 = b1, b2 = b2, b3 = b3, b4 = b4, b5 = b5)
+
+for(i in 1:length(allPlots)){
+  
+  png(here("workshop_dataviz","activities", "plots",paste0(names(allPlots)[i],".png")),
+      res = 300, width = 1050, height = 700)
+  print(allPlots[[i]])
+  dev.off()
+  
+}
+
+
+
