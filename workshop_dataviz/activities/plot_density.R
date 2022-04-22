@@ -7,7 +7,7 @@ library(ggplot2)
 
 density_data_raw = read_csv("~/historicalAverageData.csv")
 
-density_data = avgdata %>%
+density_data = density_data_raw %>%
   # filter for just the UK, France & Switzerland
   filter(country %in% c("united_kingdom", "france", "switzerland"))
 
