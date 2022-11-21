@@ -1,6 +1,6 @@
 ---
 title: "R Intro Reference"
-author: "Jack & Will"
+author: "Stuart & Will"
 date: "WACL"
 output: 
   bookdown::html_document2:
@@ -17,8 +17,7 @@ h1, .h1, h2, .h2, h3, .h3 {
 ```
 
 
-```{r setup-klippy, include=FALSE}
-klippy::klippy()
+```{r include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
@@ -140,6 +139,7 @@ mean(iris$Sepal.Length)
 
 -  Talk about philosophy of scripting (compare to Excel)
   -  Reproducibility
+  -  Automation
   -  Some journals ask for code!
   -  leaving raw data alone
   -  structuring projects
@@ -168,16 +168,14 @@ mean(iris$Sepal.Length)
 
 ### Walkthrough
 
--   Setting a working directory.
+-   Setting up a project
 
 -   Use of `read.csv()`
 
 -   Printing to the console.
 
 ```{r}
-setwd("C:/Users/Will/Google Drive/r_projects/wacl_r_intro/") # the course is an example of why this is terrible practise
-
-no = read.csv("data/part_1/MY1_no_2018.csv")
+no = read.csv("data/taught/part_1/MY1_no_2018.csv")
 
 no
 ```
@@ -207,7 +205,7 @@ Use of the pipe.
 ```{r}
 no = tibble(no)
 
-no = read.csv("data/part_1/MY1_no_2018.csv") %>% 
+no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
   tibble()
 
 ```
@@ -269,21 +267,19 @@ dat = no %>%
 library(dplyr)
 library(lubridate)
 
-setwd("C:/Users/Will/Google Drive/r_projects/wacl_r_intro/")
-
-no = read.csv("data/part_1/MY1_no_2018.csv") %>% 
+no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) 
 
-no2 = read.csv("data/part_1/MY1_no2_2018.csv") %>% 
+no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/part_1/MY1_o3_2018.csv") %>% 
+o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/part_1/MY1_met_2018.csv") %>% 
+met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) %>% 
   select(-X)
@@ -295,6 +291,10 @@ dat = no %>%
   mutate(nox = no+no2)
 
 ```
+
+### Exercise!
+
+  - Reading in data exercise
 
 ## Basic Statistical Analysis
 
@@ -410,21 +410,19 @@ abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = "red")
 library(dplyr)
 library(lubridate)
 
-setwd("C:/Users/Will/Google Drive/r_projects/wacl_r_intro/")
-
-no = read.csv("data/part_1/MY1_no_2018.csv") %>% 
+no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) 
 
-no2 = read.csv("data/part_1/MY1_no2_2018.csv") %>% 
+no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/part_1/MY1_o3_2018.csv") %>% 
+o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/part_1/MY1_met_2018.csv") %>% 
+met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) %>% 
   select(-X)
@@ -441,6 +439,10 @@ linearModel = lm(dat$nox~dat$no)
 plot(dat$no,dat$nox)
 abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = "red")
 ```
+
+### Exercise!
+
+  - Statistics exercise
 
 ## Using `openair` for Air Quality Data
 
@@ -505,22 +507,20 @@ library(dplyr)
 library(lubridate)
 library(openair)
 
-setwd("C:/Users/Will/Google Drive/r_projects/wacl_r_intro/")
-
-no = read.csv("data/part_1/MY1_no_2018.csv") %>% 
+no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) 
 
 
-no2 = read.csv("data/part_1/MY1_no2_2018.csv") %>% 
+no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/part_1/MY1_o3_2018.csv") %>% 
+o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/part_1/MY1_met_2018.csv") %>% 
+met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) %>% 
   select(-X)
@@ -552,6 +552,10 @@ timeVariation(dat, pollutant = c("no","no2","o3"))
 polarPlot(dat, pol = "no")
 ```
 
+### Exercise!
+
+  - openair exercise
+
 # Day 2 (Long)
 
 ## Reading trickier data
@@ -565,13 +569,12 @@ polarPlot(dat, pol = "no")
 ```{r}
 library(dplyr)
 library(lubridate)
-library(here)
 library(stringr)
 
-files = list.files(here("data","part_2"))
+files = list.files("data/taught/part_2")
 
 # instead of writing the path each time, lets be lazy!
-files = list.files(here("data","part_2"), full.names = T)
+files = list.files("data/taught/part_2", full.names = T)
 
 cll2 = read.csv(files[1]) %>% 
   tibble()
@@ -762,9 +765,9 @@ word(someMoreText,sep = "_")
 
 word(someMoreText,start = 3,sep = "_")
 
-list.files(here("data","part_2"))
+list.files("data/taught/part_2")
 
-sites = list.files(here("data","part_2")) %>% 
+sites = list.files("data/taught/part_2") %>% 
   word(1,sep = "_")
 
 # compact loop from earlier
@@ -785,6 +788,10 @@ for(i in 1:length(files)){
 dat = bind_rows(datList)
 
 ```
+
+### Exercise!
+
+  - Reading in data exercise
 
 ## Manipulating, Reshaping and Summarising Data
 
@@ -906,96 +913,10 @@ dat_long %>%
   pivot_wider(names_from = species, values_from = conc)
 ```
 
-## Using `ggplot2` for data visualisation
+### Exercise!
 
-This section, much like the `openair` one from before, is much looser.
+  - Data manipulation exercise
 
-Could start with wide data:
+## Real World Exercise
 
-```{r}
-df # what might we want to plot?
-
-df_daily = timeAverage(df, "day")
-
-ggplot(df_daily) # nothing happens
-
-ggplot(df_daily) + 
-  aes(x = date) # we have an axis!
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) # both axes
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) +
-  geom_line() # a plot!
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) +
-  geom_line() +
-  labs(x = "Date", y = "NOx (ppb)") # is that the right unit?
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) +
-  geom_line(color = "cadetblue") +
-  labs(x = "Date", y = "NOx (ppb)") +
-  theme_bw() # finesse 
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) +
-  geom_line(alpha = .5, color = "cadetblue") +
-  geom_point(color = "cadetblue") +
-  geom_smooth(color = "black", lty = 2) +
-  labs(x = "Date", y = "NOx (ppb)") +
-  theme_bw() # layer geometries
-
-```
-
-Then move on to long:
-
-```{r}
-df_daily_long = df %>%
-  timeAverage(avg.time = "day", type = "site") %>%
-  pivot_longer(-c(site, date), names_to = "species", values_to = "conc")
-
-df_daily_long %>%
-  filter(species == "no2") %>%
-  ggplot() +
-  aes(x = date, y = conc) +
-  geom_line() # mixed up!
-
-df_daily_long %>%
-  filter(species == "no2") %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() #that's better!
-
-df_daily_long %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() +
-  facet_wrap(~species) # faceting
-
-df_daily_long %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() +
-  facet_wrap(~species, scales = "free_y", ncol = 1) # free scales, ncol, etc.
-
-df_daily_long %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() +
-  facet_grid(site~species, scales = "free") # or use grid!
-
-
-df_daily_long %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() +
-  facet_grid(species~., scales = "free_y") +
-  theme_bw() +
-  theme(legend.position = "top") +
-  labs(x = "Date", y = "Concentration (ppb)", color = "Site") # good theming
-
-```
-
+Follow through with Real World Exercise section

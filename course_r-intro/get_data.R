@@ -1,3 +1,4 @@
+# TODO Is this file needed once we have the output files saved in the repo?
 library(here)
 library(magrittr)
 library(dplyr)
@@ -16,10 +17,6 @@ add_bad_flag = function(df){
 }
 
 # -------------------------------------------------------------------------
-
-if(!dir.exists(here("course_r-intro", "data"))){ # if dirs haven't been set up, do that
-  source(here("course_r-intro", "aaa_intialise.R"))
-}
 
 set.seed(10)
 
