@@ -67,19 +67,6 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 ## Who are we?
 
-**Stuart Lacy**
-
-I use R for:
-
--  **Data** analysis from cleaning raw data to final modelling/visualisation
--  **Statistical modelling / Machine learning** of data - R has lots of packages in this area
--  Developing **reproducible data tools** 
--  Writing web app data dashboards (using `Shiny`)
-
-![](images/jack-gramsper.png)
-
-## Who are we?
-
 **Will Drysdale**
 
 I use R for:
@@ -104,6 +91,25 @@ I also use R in many other aspects of my work:
 
 ![](images/will_slide2.png)
 
+## Who are we?
+
+**Stuart Lacy**
+
+I use R for:
+
+-  \alert{Statistical modelling / Machine learning}
+-  Writing web app data dashboards (using `Shiny`)
+-  Developing \alert{reproducible data tools}
+
+![](images/stuart.png)
+
+## Who are we?
+
+**Jack Davison**
+
+- High quality data viz
+
+![](images/jack-tt_banner.png)
 
 ## Who are you?
 
@@ -113,6 +119,7 @@ I also use R in many other aspects of my work:
 - What do you do?
 - What kind of data do you use?
   - Big? Small? From the lab? Fieldwork? Modelled? Time-series? Categorical?
+- What type of data analysis do you do?
 - What are you hoping to get out of these sessions?
 
 ## Further Help
@@ -126,54 +133,6 @@ I also use R in many other aspects of my work:
 - WACL has a programming Slack channel for help with R & Python.
 
 - If there is interest, we'll look to do shorter sessions on more specific problems
-
-# Setting up R
-
-## Installing R
-
-- These slides guide you through the process of installing R and RStudio onto a desktop.
-
-- R, RStudio and R Packages are three distinct things:
-  - R is a **programming language** built for statistics.
-  - RStudio is a **development environment** in which R runs. It makes R easier to use.
-  - Packages are **collections of specialist tools** which make R more suited for certain tasks.
-
-- Instructions are given for Windows computers, but should be the same for Mac and Linux; simply click on the appropriate option when they are presented.
-  
-## How to Install R
-
-1.  Go to [cloud.r-project.org](https://cloud.r-project.org/).
-
-2.  Select **Download R for Windows**.
-
-3.  Select **base**.
-
-4.  Click **Download R 4.2.2 for Windows**.
-
-5.  **Run the .exe** to install R.
-
-## How to Install RStudio
-
-1.  Go to [rstudio.com](https://www.rstudio.com/).
-
-2.  Click **Download RStudio** (top right blue button)
-
-3.  Scroll down and Select **RStudio Desktop – Open Source Edition** (Free option).
-
-4.  Scroll down to and click **Step 2: Install RStudio Desktop for Windows**
-
-5.  **Run the .exe** to install RStudio.
-
-## How to Install Packages
-
-1.  **Launch RStudio**.
-
-2.  In the console (the place you can type on the left-hand side of the screen, where the line starts with a “>”) type the following commands, pressing enter between them:
-
-```{r chunk, eval = F}
-install.packages("openair")
-install.packages("tidyverse")
-```
 
 # Exercises
 

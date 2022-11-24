@@ -1,0 +1,73 @@
+---
+title: "Installing R and RStudio"
+author: \textbf{Will Drysdale and Jack Davison}
+institute: "University of York"
+output: 
+  beamer_presentation: 
+    latex_engine: xelatex
+    colortheme: dolphin
+    theme: metropolis
+urlcolor: blue
+header-includes:
+- \newcommand{\blarge}{\begin{Large}}
+- \newcommand{\elarge}{\end{Large}}
+---
+
+```{r echo=FALSE}
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+## Purpose
+
+- These slides guide you through the process of installing R and RStudio onto a desktop.
+
+- R, RStudio and R Packages are three distinct things:
+  - R is a **programming language** built for statistics.
+  - RStudio is a **development environment** in which R runs. It makes R easier to use.
+  - Packages are **collections of specialist tools** which make R more suited for certain tasks.
+
+- Instructions are given for Windows computers, but should be the same for Mac and Linux; simply click on the appropriate option when they are presented.
+  
+## How to Install R
+
+1.  Go to [cloud.r-project.org](https://cloud.r-project.org/).
+
+2.  Select **Download R for Windows**.
+
+3.  Select **base**.
+
+4.  Click **Download R 4.2.2 for Windows**.
+
+5.  **Run the .exe** to install R.
+
+6. Install [R tools](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html) to aid with future package installations
+
+## How to Install RStudio
+
+1.  Go to [rstudio.com](https://www.rstudio.com/).
+
+2.  Click **Download RStudio** (top right blue button)
+
+3.  Scroll down and Select **RStudio Desktop – Open Source Edition** (Free option).
+
+4.  Scroll down to and click **Step 2: Install RStudio Desktop for Windows**
+
+5.  **Run the .exe** to install RStudio.
+
+6.  Click Tools -> Global Options -> and uncheck Restore .RData into Workspace and select the dropdown to never ask
+
+## How to Install Packages
+
+1.  **Launch RStudio**.
+
+2.  In the console (the place you can type on the left-hand side of the screen, where the line starts with a “>”) type the following commands, pressing enter between them:
+
+```{r chunk, eval = F}
+install.packages("openair")
+install.packages("tidyverse")
+```
+
