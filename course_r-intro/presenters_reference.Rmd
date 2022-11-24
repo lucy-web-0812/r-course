@@ -596,18 +596,37 @@ kc1 = read.csv(files[3]) %>%
   select(-X) %>% 
   mutate(date = ymd_hms(date))
 
+my1 = read.csv(files[5]) %>% 
+  tibble() %>% 
+  select(-X) %>% 
+  mutate(date = ymd_hms(date))
+
+# This errors!
 lon6 = read.csv(files[4]) %>% 
   tibble() %>% 
   select(-X) %>% 
   mutate(date = ymd_hms(date))
 
-my1 = read.csv(files[5]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
-  mutate(date = ymd_hms(date))
 ```
 
-- Can combine using `left_join` as saw yesterday but produces by default ugly column names
+- Discuss Unix time, if you ever come across a long integer that starts like this it's likely in Unix time
+
+```{r}
+lon6 = read.csv(files[4]) %>% 
+  tibble()
+lon6
+```
+
+- Can parse using `as_datetime` rather than `ymd_hms`.
+
+```{r}
+lon6 = read.csv(files[4]) %>% 
+  tibble() %>% 
+  select(-X) %>% 
+  mutate(date = as_datetime(date))
+```
+
+- Can combine sites using `left_join` as saw yesterday but produces by default ugly column names
 
 ```{r}
 cll2 |>
@@ -615,6 +634,7 @@ cll2 |>
 ```
 
 - Can fix with the `suffix` argument, but already with just 2 sites have 7 columns, will be hard to work with when add more!
+- Will come back to this at the end of the exercise to highlight a more efficient way of structuring our data
 - TODO Is there a killer motivating reason to use tidy data that will click before they've gotten onto vectorisation / plotting?
 
 ```{r}
@@ -655,7 +675,7 @@ kc1 = read.csv(files[3]) %>%
 lon6 = read.csv(files[4]) %>% 
   tibble() %>% 
   select(-X) %>% 
-  mutate(date = ymd_hms(date),
+  mutate(date = as_datetime(date),
          site = "lon6")
 
 my1 = read.csv(files[5]) %>% 
@@ -767,6 +787,15 @@ for (i in 1:length(files)) {
           as.numeric(),
         site = "kc1"
       )
+  # LON6 is 4th site, need to parse as_datetime
+  } else if (i == 4) {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(
+        date = as_datetime(date),
+        site = "lon6"
+      )
   } else {
     datList[[i]] = read.csv(files[i]) %>%
       tibble() %>%
@@ -777,7 +806,10 @@ for (i in 1:length(files)) {
       )
   }
 }
-dat = bind_rows(list)
+dat = bind_rows(datList)
+# Ah but only have 2 sites, kc1 and lon6!
+# Because in the 'else' we don't know what site we're on
+dat |> count(site)
 ```
 
 Fixing the sites.
@@ -791,38 +823,56 @@ Fixing the sites.
 
 someText = "The quick brown fox jumped over the lazy dog"
 
-word(someText,start = 2)
+word(someText, start = 2)
 
 someMoreText = "The_quick_brown_underscore_separated_dog"
 
 word(someMoreText)
 
-word(someMoreText,sep = "_")
+word(someMoreText, sep = "_")
 
-word(someMoreText,start = 3,sep = "_")
+word(someMoreText, start = 3, sep = "_")
 
 list.files("data/taught/part_2")
 
-sites = list.files("data/taught/part_2") %>% 
-  word(1,sep = "_")
+sites = list.files("data/taught/part_2") %>%
+  word(1, sep = "_")
 
 # compact loop from earlier
 
 datList = list()
 
-for(i in 1:length(files)){
-  
-  datList[[i]] = read.csv(files[i]) %>% 
-    tibble() %>% 
-    select(-X) %>% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == "missing", NA, no) %>% 
-             as.numeric(),
-           site = sites[i]) 
+for (i in 1:length(files)) {
+  # Handle KC1 missing data
+  if (sites[i] == 'KC1') {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(
+        date = ymd_hms(date),
+        no = ifelse(no == "missing", NA, no) %>%
+          as.numeric(),
+        site = sites[i]
+      )
+    # Handle LON6 different timestamp
+  } else if (sites[i] == 'LON6') {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(date = as_datetime(date),
+             site = sites[i])
+  } else {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(date = ymd_hms(date),
+             site = sites[i])
+  }
 }
 
 dat = bind_rows(datList)
-
+# Have all sites!
+dat |> count(site)
 ```
 
 ### Exercise!
@@ -913,6 +963,25 @@ dat_long %>%
             sd   =   sd(conc, na.rm = T))
 ```
 
+- Show how much easier that is than writing out summary for every column in wide!
+- And can then compare directly against each other
+
+```{r}
+dat_wide <- cll2 |> left_join(lon6, by='date', suffix=c("_cll2", "_lon6"))
+mean(dat_wide$no_cll2, na.rm=T)
+mean(dat_wide$no2_cll2, na.rm=T)
+mean(dat_wide$o3_cll2, na.rm=T)
+mean(dat_wide$no_lon6, na.rm=T)
+mean(dat_wide$no2_lon6, na.rm=T)
+mean(dat_wide$o3_lon6, na.rm=T)
+sd(dat_wide$no_cll2, na.rm=T)
+sd(dat_wide$no2_cll2, na.rm=T)
+sd(dat_wide$o3_cll2, na.rm=T)
+sd(dat_wide$no_lon6, na.rm=T)
+sd(dat_wide$no2_lon6, na.rm=T)
+sd(dat_wide$o3_lon6, na.rm=T)
+```
+
 Also works with mutate.
 
 ```{r}
@@ -924,12 +993,28 @@ dat_long %>%
 
 Reshaped data good for filtering.
 
+- **NB: Difference between `=` and `==`
+
 ```{r}
 dat_long %>% 
   filter(site == "CLL2")
 
 dat_long %>% 
   filter(site %in% c("CLL2", "MY1", "somewhere_else"))
+```
+
+- Filtering much easier on tidy data too! Find all times when had NO > 10ppb
+
+```{r}
+# Easy in tidy
+dat_long |>
+  filter (species == 'no', conc > 10)
+
+# In wide have to specify each column!
+# Doesn't scale with number of sites!
+dat_wide |>
+  filter(no_cll2 > 10 | no_lon6 > 60 ...)
+
 ```
 
 Grouped data also works with filter!
@@ -942,11 +1027,22 @@ dat_long %>%
 
 Can pivot wider again...
 
+- One level of wide, tidy on site but wide on species
+
 ```{r}
 dat_long %>% 
-  filter(site == "CLL2") %>% 
-  select(-site) %>% 
+  filter(site %in% c("CLL2", "LON6")) %>% 
   pivot_wider(names_from = species, values_from = conc)
+```
+
+- Two levels of wide on both site and species
+
+**NB: This is what we had when we did that `left_join` at the start**
+
+```{r}
+dat_long %>% 
+  filter(site %in% c("CLL2", "LON6")) %>% 
+  pivot_wider(names_from = c(site, species), values_from = conc)
 ```
 
 ### Exercise!

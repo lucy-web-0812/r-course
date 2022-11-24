@@ -1852,6 +1852,7 @@ abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = &quot;red&quot;
 <div id="walkthrough-2" class="section level3" number="1.4.1">
 <h3><span class="header-section-number">1.4.1</span> Walkthrough</h3>
 <p>This is a pretty open section on what openair can do.</p>
+<p><strong>Afterwords mention Vignettes?</strong></p>
 <pre class="r"><code>library(openair)
 
 # the wind direction averaging point could be linked here, but it might be a bit subtle? could circle back later
@@ -1975,7 +1976,7 @@ files = list.files(&quot;data/taught/part_2&quot;)
 # instead of writing the path each time, lets be lazy!
 files = list.files(&quot;data/taught/part_2&quot;, full.names = T)
 
-cll2 = read.csv(files[1]) %&gt;% 
+cll2 = read.csv(files[1]) %&gt;% cll2 |&gt; left_join()lon6, by=&#39;date&#39;
   tibble()
 
 cll2 = read.csv(files[1]) %&gt;% 
@@ -1993,18 +1994,48 @@ kc1 = read.csv(files[3]) %&gt;%
   select(-X) %&gt;% 
   mutate(date = ymd_hms(date))
 
-lon6 = read.csv(files[4]) %&gt;% 
+my1 = read.csv(files[5]) %&gt;% 
   tibble() %&gt;% 
   select(-X) %&gt;% 
   mutate(date = ymd_hms(date))
 
-my1 = read.csv(files[5]) %&gt;% 
+# This errors!
+lon6 = read.csv(files[4]) %&gt;% 
   tibble() %&gt;% 
   select(-X) %&gt;% 
   mutate(date = ymd_hms(date))</code></pre>
 <ul>
-<li>If we want to join these, we need to be able to tell them apart….</li>
+<li>Discuss Unix time, if you ever come across a long integer that starts like this it’s likely in Unix time</li>
 </ul>
+<pre class="r"><code>lon6 = read.csv(files[4]) %&gt;% 
+  tibble()
+lon6</code></pre>
+<ul>
+<li>Can parse using <code>as_datetime</code> rather than <code>ymd_hms</code>.</li>
+</ul>
+<pre class="r"><code>lon6 = read.csv(files[4]) %&gt;% 
+  tibble() %&gt;% 
+  select(-X) %&gt;% 
+  mutate(date = as_datetime(date))</code></pre>
+<ul>
+<li>Can combine sites using <code>left_join</code> as saw yesterday but produces by default ugly column names</li>
+</ul>
+<pre class="r"><code>cll2 |&gt;
+  left_join(kc1, by=&#39;date&#39;)</code></pre>
+<ul>
+<li>Can fix with the <code>suffix</code> argument, but already with just 2 sites have 7 columns, will be hard to work with when add more!</li>
+<li>TODO Is there a killer motivating reason to use tidy data that will click before they’ve gotten onto vectorisation / plotting?</li>
+</ul>
+<pre class="r"><code>cll2 |&gt;
+  left_join(kc1, by=&#39;date&#39;, suffix=c(&quot;_cll2&quot;, &quot;_kc1&quot;))</code></pre>
+<ul>
+<li>“Tidy data” prefers to have 1 row per observation and use column values to explicitly reference sites</li>
+<li>Makes it easier for plotting and certain types of analysis</li>
+</ul>
+<pre class="r"><code>rbind(
+  cll2 |&gt; mutate(site = &#39;cll2&#39;),
+  kc1 |&gt; mutate(site = &#39;kc1&#39;)
+)</code></pre>
 <pre class="r"><code>cll2 = read.csv(files[1]) %&gt;% 
   tibble() %&gt;% 
   select(-X) %&gt;% 
@@ -2026,7 +2057,7 @@ kc1 = read.csv(files[3]) %&gt;%
 lon6 = read.csv(files[4]) %&gt;% 
   tibble() %&gt;% 
   select(-X) %&gt;% 
-  mutate(date = ymd_hms(date),
+  mutate(date = as_datetime(date),
          site = &quot;lon6&quot;)
 
 my1 = read.csv(files[5]) %&gt;% 
@@ -2074,59 +2105,81 @@ dat = bind_rows(cll2, hors, kc1, lon6, my1) #yay</code></pre>
 <li><p>What does a loop do?</p></li>
 <li><p>What is the benefit of working this way? (compare to Excel - what happens if a new file appears? etc.)</p></li>
 </ul>
-<pre class="r"><code>for(i in 1:length(files)){ # talk through what a loop is doing
+<pre class="r"><code>for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
   # two problems, how do we stop overwriting the previous data?
-  dat = read.csv(files[i]) %&gt;% 
-    tibble() %&gt;% 
-    select(-X) %&gt;% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;% 
-             as.numeric(),
-           site = &quot;kc1&quot;) # how do we address the site issue?
+  dat = read.csv(files[i]) %&gt;%
+    tibble() %&gt;%
+    select(-X) %&gt;%
+    mutate(
+      date = ymd_hms(date),
+      no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;%
+        as.numeric(),
+      site = &quot;kc1&quot;
+    ) # how do we address the site issue?
 }
 
 
 # The storage issue -------------------------------------------------------
 
 datList = list()
-for(i in 1:length(files)){ # talk through what a loop is doing
+for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
-  datList[[i]] = read.csv(files[i]) %&gt;% 
-    tibble() %&gt;% 
-    select(-X) %&gt;% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;% 
-             as.numeric(),
-           site = &quot;kc1&quot;) 
+  datList[[i]] = read.csv(files[i]) %&gt;%
+    tibble() %&gt;%
+    select(-X) %&gt;%
+    mutate(
+      date = ymd_hms(date),
+      no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;%
+        as.numeric(),
+      site = &quot;kc1&quot;
+    )
 }
 
 dat = bind_rows(list)
-# OR
 
-for(i in 1:length(files)){ # talk through what a loop is doing
+# But really we only want to coerce the NA for the KCL site
+
+datList = list()
+for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
-  if(i == 1){
-    dat = read.csv(files[i]) %&gt;% 
-      tibble() %&gt;% 
-      select(-X) %&gt;% 
-      mutate(date = ymd_hms(date),
-             no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;% 
-               as.numeric(),
-             site = &quot;kc1&quot;) 
-  }else{
-    temp = read.csv(files[i]) %&gt;% 
-      tibble() %&gt;% 
-      select(-X) %&gt;% 
-      mutate(date = ymd_hms(date),
-             no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;% 
-               as.numeric(),
-             site = &quot;kc1&quot;) 
-    
-    dat = bind_rows(dat,temp)
+  # We know that KC1 is the third site, we will make this more explicit shortly
+  if (i == 3) {
+    datList[[i]] = read.csv(files[i]) %&gt;%
+      tibble() %&gt;%
+      select(-X) %&gt;%
+      mutate(
+        date = ymd_hms(date),
+        no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;%
+          as.numeric(),
+        site = &quot;kc1&quot;
+      )
+  # LON6 is 4th site, need to parse as_datetime
+  } else if (i == 4) {
+    datList[[i]] = read.csv(files[i]) %&gt;%
+      tibble() %&gt;%
+      select(-X) %&gt;%
+      mutate(
+        date = as_datetime(date),
+        site = &quot;lon6&quot;
+      )
+  } else {
+    datList[[i]] = read.csv(files[i]) %&gt;%
+      tibble() %&gt;%
+      select(-X) %&gt;%
+      mutate(
+        date = ymd_hms(date),
+        site = &quot;kc1&quot;
+      )
   }
-  
-}</code></pre>
+}
+dat = bind_rows(datList)
+# Ah but only have 2 sites, kc1 and lon6!
+# Because in the &#39;else&#39; we don&#39;t know what site we&#39;re on
+dat |&gt; count(site)</code></pre>
 <p>Fixing the sites.</p>
 <ul>
 <li><p>Introduce <code>stringr</code> (tidyverse)</p></li>
@@ -2136,37 +2189,56 @@ for(i in 1:length(files)){ # talk through what a loop is doing
 
 someText = &quot;The quick brown fox jumped over the lazy dog&quot;
 
-word(someText,start = 2)
+word(someText, start = 2)
 
 someMoreText = &quot;The_quick_brown_underscore_separated_dog&quot;
 
 word(someMoreText)
 
-word(someMoreText,sep = &quot;_&quot;)
+word(someMoreText, sep = &quot;_&quot;)
 
-word(someMoreText,start = 3,sep = &quot;_&quot;)
+word(someMoreText, start = 3, sep = &quot;_&quot;)
 
 list.files(&quot;data/taught/part_2&quot;)
 
-sites = list.files(&quot;data/taught/part_2&quot;) %&gt;% 
-  word(1,sep = &quot;_&quot;)
+sites = list.files(&quot;data/taught/part_2&quot;) %&gt;%
+  word(1, sep = &quot;_&quot;)
 
 # compact loop from earlier
 
 datList = list()
 
-for(i in 1:length(files)){
-  
-  datList[[i]] = read.csv(files[i]) %&gt;% 
-    tibble() %&gt;% 
-    select(-X) %&gt;% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;% 
-             as.numeric(),
-           site = sites[i]) 
+for (i in 1:length(files)) {
+  # Handle KC1 missing data
+  if (sites[i] == &#39;KC1&#39;) {
+    datList[[i]] = read.csv(files[i]) %&gt;%
+      tibble() %&gt;%
+      select(-X) %&gt;%
+      mutate(
+        date = ymd_hms(date),
+        no = ifelse(no == &quot;missing&quot;, NA, no) %&gt;%
+          as.numeric(),
+        site = sites[i]
+      )
+    # Handle LON6 different timestamp
+  } else if (sites[i] == &#39;LON6&#39;) {
+    datList[[i]] = read.csv(files[i]) %&gt;%
+      tibble() %&gt;%
+      select(-X) %&gt;%
+      mutate(date = as_datetime(date),
+             site = sites[i])
+  } else {
+    datList[[i]] = read.csv(files[i]) %&gt;%
+      tibble() %&gt;%
+      select(-X) %&gt;%
+      mutate(date = ymd_hms(date),
+             site = sites[i])
+  }
 }
 
-dat = bind_rows(datList)</code></pre>
+dat = bind_rows(datList)
+# Have all sites!
+dat |&gt; count(site)</code></pre>
 <div id="exercise-3" class="section level3" number="2.1.1">
 <h3><span class="header-section-number">2.1.1</span> Exercise!</h3>
 <ul>
@@ -2237,26 +2309,66 @@ dat_long = dat %&gt;% pivot_longer(-c(site, date), names_to = &quot;species&quot
   group_by(site, species) %&gt;%
   summarise(mean = mean(conc, na.rm = T),
             sd   =   sd(conc, na.rm = T))</code></pre>
+<ul>
+<li>Show how much easier that is than writing out summary for every column in wide!</li>
+<li>And can then compare directly against each other</li>
+</ul>
+<pre class="r"><code>dat_wide &lt;- cll2 |&gt; left_join(lon6, by=&#39;date&#39;, suffix=c(&quot;_cll2&quot;, &quot;_lon6&quot;))
+mean(dat_wide$no_cll2, na.rm=T)
+mean(dat_wide$no2_cll2, na.rm=T)
+mean(dat_wide$o3_cll2, na.rm=T)
+mean(dat_wide$no_lon6, na.rm=T)
+mean(dat_wide$no2_lon6, na.rm=T)
+mean(dat_wide$o3_lon6, na.rm=T)
+sd(dat_wide$no_cll2, na.rm=T)
+sd(dat_wide$no2_cll2, na.rm=T)
+sd(dat_wide$o3_cll2, na.rm=T)
+sd(dat_wide$no_lon6, na.rm=T)
+sd(dat_wide$no2_lon6, na.rm=T)
+sd(dat_wide$o3_lon6, na.rm=T)</code></pre>
 <p>Also works with mutate.</p>
 <pre class="r"><code>dat_long %&gt;% 
   group_by(site, species) %&gt;% 
   mutate(p95 = quantile(conc, .95, na.rm = T),
          flag = conc &gt; p95)</code></pre>
 <p>Reshaped data good for filtering.</p>
+<ul>
+<li>**NB: Difference between <code>=</code> and <code>==</code></li>
+</ul>
 <pre class="r"><code>dat_long %&gt;% 
   filter(site == &quot;CLL2&quot;)
 
 dat_long %&gt;% 
   filter(site %in% c(&quot;CLL2&quot;, &quot;MY1&quot;, &quot;somewhere_else&quot;))</code></pre>
+<ul>
+<li>Filtering much easier on tidy data too! Find all times when had NO &gt; 10ppb</li>
+</ul>
+<pre class="r"><code># Easy in tidy
+dat_long |&gt;
+  filter (species == &#39;no&#39;, conc &gt; 10)
+
+# In wide have to specify each column!
+# Doesn&#39;t scale with number of sites!
+dat_wide |&gt;
+  filter(no_cll2 &gt; 10 | no_lon6 &gt; 60 ...)</code></pre>
 <p>Grouped data also works with filter!</p>
 <pre class="r"><code>dat_long %&gt;%
   group_by(site, species) %&gt;%
   filter(conc == max(conc, na.rm = T))</code></pre>
 <p>Can pivot wider again…</p>
+<ul>
+<li>One level of wide, tidy on site but wide on species</li>
+</ul>
 <pre class="r"><code>dat_long %&gt;% 
-  filter(site == &quot;CLL2&quot;) %&gt;% 
-  select(-site) %&gt;% 
+  filter(site %in% c(&quot;CLL2&quot;, &quot;LON6&quot;)) %&gt;% 
   pivot_wider(names_from = species, values_from = conc)</code></pre>
+<ul>
+<li>Two levels of wide on both site and species</li>
+</ul>
+<p><strong>NB: This is what we had when we did that <code>left_join</code> at the start</strong></p>
+<pre class="r"><code>dat_long %&gt;% 
+  filter(site %in% c(&quot;CLL2&quot;, &quot;LON6&quot;)) %&gt;% 
+  pivot_wider(names_from = c(site, species), values_from = conc)</code></pre>
 <div id="exercise-4" class="section level3" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Exercise!</h3>
 <ul>
