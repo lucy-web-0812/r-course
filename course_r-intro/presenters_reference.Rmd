@@ -450,6 +450,8 @@ abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = "red")
 
 This is a pretty open section on what openair can do.
 
+**Afterwords mention Vignettes?**
+
 ```{r}
 library(openair)
 
@@ -605,7 +607,30 @@ my1 = read.csv(files[5]) %>%
   mutate(date = ymd_hms(date))
 ```
 
--  If we want to join these, we need to be able to tell them apart....
+- Can combine using `left_join` as saw yesterday but produces by default ugly column names
+
+```{r}
+cll2 |>
+  left_join(kc1, by='date')
+```
+
+- Can fix with the `suffix` argument, but already with just 2 sites have 7 columns, will be hard to work with when add more!
+- TODO Is there a killer motivating reason to use tidy data that will click before they've gotten onto vectorisation / plotting?
+
+```{r}
+cll2 |>
+  left_join(kc1, by='date', suffix=c("_cll2", "_kc1"))
+```
+
+- "Tidy data" prefers to have 1 row per observation and use column values to explicitly reference sites
+- Makes it easier for plotting and certain types of analysis
+
+```{r}
+rbind(
+  cll2 |> mutate(site = 'cll2'),
+  kc1 |> mutate(site = 'kc1')
+)
+```
 
 
 ```{r}
@@ -689,59 +714,70 @@ Flow control - can we be lazier?
 ```{r}
 
 
-for(i in 1:length(files)){ # talk through what a loop is doing
+
+for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
   # two problems, how do we stop overwriting the previous data?
-  dat = read.csv(files[i]) %>% 
-    tibble() %>% 
-    select(-X) %>% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == "missing", NA, no) %>% 
-             as.numeric(),
-           site = "kc1") # how do we address the site issue?
+  dat = read.csv(files[i]) %>%
+    tibble() %>%
+    select(-X) %>%
+    mutate(
+      date = ymd_hms(date),
+      no = ifelse(no == "missing", NA, no) %>%
+        as.numeric(),
+      site = "kc1"
+    ) # how do we address the site issue?
 }
 
 
 # The storage issue -------------------------------------------------------
 
 datList = list()
-for(i in 1:length(files)){ # talk through what a loop is doing
+for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
-  datList[[i]] = read.csv(files[i]) %>% 
-    tibble() %>% 
-    select(-X) %>% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == "missing", NA, no) %>% 
-             as.numeric(),
-           site = "kc1") 
+  datList[[i]] = read.csv(files[i]) %>%
+    tibble() %>%
+    select(-X) %>%
+    mutate(
+      date = ymd_hms(date),
+      no = ifelse(no == "missing", NA, no) %>%
+        as.numeric(),
+      site = "kc1"
+    )
 }
 
 dat = bind_rows(list)
-# OR
 
-for(i in 1:length(files)){ # talk through what a loop is doing
+# But really we only want to coerce the NA for the KCL site
+
+datList = list()
+for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
-  if(i == 1){
-    dat = read.csv(files[i]) %>% 
-      tibble() %>% 
-      select(-X) %>% 
-      mutate(date = ymd_hms(date),
-             no = ifelse(no == "missing", NA, no) %>% 
-               as.numeric(),
-             site = "kc1") 
-  }else{
-    temp = read.csv(files[i]) %>% 
-      tibble() %>% 
-      select(-X) %>% 
-      mutate(date = ymd_hms(date),
-             no = ifelse(no == "missing", NA, no) %>% 
-               as.numeric(),
-             site = "kc1") 
-    
-    dat = bind_rows(dat,temp)
+  # We know that KC1 is the third site, we will make this more explicit shortly
+  if (i == 3) {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(
+        date = ymd_hms(date),
+        no = ifelse(no == "missing", NA, no) %>%
+          as.numeric(),
+        site = "kc1"
+      )
+  } else {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(
+        date = ymd_hms(date),
+        site = "kc1"
+      )
   }
-  
 }
+dat = bind_rows(list)
 ```
 
 Fixing the sites.
