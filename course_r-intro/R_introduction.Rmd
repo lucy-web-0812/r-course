@@ -1,6 +1,8 @@
 ---
-title: "Exercises"
-author: \textbf{Will Drysdale and Jack Davison}
+title: "WACL R Training"
+subtitle: Training for air pollution data analysis in R
+date: 28th & 29th Nov.
+author: \textbf{Will Drysdale and Stuart Lacy}
 institute: "University of York"
 output: 
   beamer_presentation: 
@@ -8,11 +10,9 @@ output:
     colortheme: dolphin
     theme: metropolis
 urlcolor: blue
-monofont: Consolas
 header-includes:
 - \newcommand{\blarge}{\begin{Large}}
 - \newcommand{\elarge}{\end{Large}}
-- \setmonofont[Colour=D40000]{Consolas}
 ---
 
 ```{r echo=FALSE}
@@ -23,16 +23,128 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 })
 ```
 
+# Introduction
+
+## Welcome!
+
+*A course over two afternoons for beginners with R*
+
+- Introduction to R, RStudio and Programming for beginners
+- Building a script; the benefits of programming over spreadsheets 
+- Reading, manipulating and visualising data, with tips and tricks to solve common problems
+- Chance to practise skills with us on hand to help out
+
+## Approaches
+
+- Authentic, live coding
+- All course material will be made available
+  - This will include all data and script files produced during this course
+  - A bespoke self-teaching document will also be made available
+  - Useful for post-course learning
+- All material used in this course will be **entirely reproducible**
+  - This means that you will be able to recreate all the outputs shown
+    during the course (and afterwards)
+- Questions are encouraged, and one of us will always be at hand to solve problems
+
+## Topics to be covered 
+
+**Monday 28th November, 13:00-17:00**
+
+- Introduction to R for Air Quality Data
+  - Getting familiar with R and RStudio
+  - Reading and interrogating data within R
+  - Introducing statistical analysis; averages and trend lines
+  - Using `openair` for air quality data analysis
+  
+**Tuesday 29th November, 09:00-16:00**
+
+- Further uses of R in Data Science
+  - Reading and combining multiple data streams
+  - Further data handling; reshaping, grouping and summarising
+  - Real world data project
+  
+- Making publication standard visualisations with `ggplot2`
+
+## Who are we?
+
+**Will Drysdale**
+
+I use R for:
+
+- **Eddy Covariance** - processing of high time resolution data (5 - 20 Hz) to calculate emissions using _eddy4R_
+  - Perform analysis **automatically** and **reproducibly**
+  - **Collaborate** with developers to add our own tools
+
+![](images/will_ec.png)
+
+## Who are we?
+
+**Will Drysdale**
+
+I also use R in many other aspects of my work:
+
+- **Instrument data** work up
+
+- Producing **Figures**
+
+- **Mapping** spatial data
+
+![](images/will_slide2.png)
+
+## Who are we?
+
+**Stuart Lacy**
+
+I use R for:
+
+-  \alert{Statistical modelling / Machine learning}
+-  Writing web app data dashboards (using `Shiny`)
+-  Developing \alert{reproducible data tools}
+
+![](images/stuart.png)
+
+## Who are we?
+
+**Jack Davison**
+
+- High quality data viz
+
+![](images/jack-tt_banner.png)
+
+## Who are you?
+
+**Introductions**
+
+- What is your name?
+- What do you do?
+- What kind of data do you use?
+  - Big? Small? From the lab? Fieldwork? Modelled? Time-series? Categorical?
+- What type of data analysis do you do?
+- What are you hoping to get out of these sessions?
+
+## Further Help
+
+**Learning R does not finish at the end of this short course**
+
+- There are many R users in WACL who are happy to help, including ourselves.
+
+- There are lots of resources online that we'll point you to.
+
+- WACL has a programming Slack channel for help with R & Python.
+
+- If there is interest, we'll look to do shorter sessions on more specific problems
+
+# Exercises
+
 ## Set-up
 
--  Download the .csv files from the `data_exercise` folder and put it somehwere in your documents folder.
+-  Download the course materials from Google Drive and setup a Project  
 
 -  Make sure your packages are loaded!
 
-```
+```{r eval=F}
 library(openair)
 library(dplyr)
-#etc...
 ```
 
 # Day 1
@@ -97,9 +209,10 @@ library(dplyr)
 
 # Real World Exercise
 
+
 ## Getting ready
 
--  Download the `cape_verde.csv` file from the `data_exercise` folder.
+- **TODO: Remove this if think won't make it here, and replace with ggplot workshop contents**
 
 -  Complete one or more of these challenges!
 

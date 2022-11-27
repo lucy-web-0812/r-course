@@ -8,11 +8,9 @@ output:
     colortheme: dolphin
     theme: metropolis
 urlcolor: blue
-monofont: Consolas
 header-includes:
 - \newcommand{\blarge}{\begin{Large}}
 - \newcommand{\elarge}{\end{Large}}
-- \setmonofont[Colour=D40000]{Consolas}
 ---
 
 ```{r echo=FALSE}
@@ -42,23 +40,25 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 3.  Select **base**.
 
-4.  Click **Download R 4.1.2 for Windows**.
+4.  Click **Download R 4.2.2 for Windows**.
 
 5.  **Run the .exe** to install R.
+
+6. Install [R tools](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html) to aid with future package installations
 
 ## How to Install RStudio
 
 1.  Go to [rstudio.com](https://www.rstudio.com/).
 
-2.  Navigate to **products** > **RStudio**.
+2.  Click **Download RStudio** (top right blue button)
 
-3.  Scroll down and select **Download Rstudio Desktop**.
+3.  Scroll down and Select **RStudio Desktop – Open Source Edition** (Free option).
 
-4.  Select **RStudio Desktop – Open Source License** (Free option).
+4.  Scroll down to and click **Step 2: Install RStudio Desktop for Windows**
 
-5.  Select **RStudio - Windows**.
+5.  **Run the .exe** to install RStudio.
 
-6.  **Run the .exe** to install RStudio.
+6.  Click Tools -> Global Options -> and uncheck Restore .RData into Workspace and select the dropdown to never ask
 
 ## How to Install Packages
 

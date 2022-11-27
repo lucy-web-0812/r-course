@@ -1,6 +1,6 @@
 ---
 title: "R Intro Reference"
-author: "Jack & Will"
+author: "Stuart & Will"
 date: "WACL"
 output: 
   bookdown::html_document2:
@@ -17,8 +17,7 @@ h1, .h1, h2, .h2, h3, .h3 {
 ```
 
 
-```{r setup-klippy, include=FALSE}
-klippy::klippy()
+```{r include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
@@ -140,6 +139,7 @@ mean(iris$Sepal.Length)
 
 -  Talk about philosophy of scripting (compare to Excel)
   -  Reproducibility
+  -  Automation
   -  Some journals ask for code!
   -  leaving raw data alone
   -  structuring projects
@@ -168,16 +168,14 @@ mean(iris$Sepal.Length)
 
 ### Walkthrough
 
--   Setting a working directory.
+-   Setting up a project
 
 -   Use of `read.csv()`
 
 -   Printing to the console.
 
 ```{r}
-setwd("C:/Users/Will/Google Drive/r_projects/wacl_r_intro/") # the course is an example of why this is terrible practise
-
-no = read.csv("data/part_1/MY1_no_2018.csv")
+no = read.csv("data/taught/part_1/MY1_no_2018.csv")
 
 no
 ```
@@ -207,7 +205,7 @@ Use of the pipe.
 ```{r}
 no = tibble(no)
 
-no = read.csv("data/part_1/MY1_no_2018.csv") %>% 
+no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
   tibble()
 
 ```
@@ -269,21 +267,19 @@ dat = no %>%
 library(dplyr)
 library(lubridate)
 
-setwd("C:/Users/Will/Google Drive/r_projects/wacl_r_intro/")
-
-no = read.csv("data/part_1/MY1_no_2018.csv") %>% 
+no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) 
 
-no2 = read.csv("data/part_1/MY1_no2_2018.csv") %>% 
+no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/part_1/MY1_o3_2018.csv") %>% 
+o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/part_1/MY1_met_2018.csv") %>% 
+met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) %>% 
   select(-X)
@@ -295,6 +291,10 @@ dat = no %>%
   mutate(nox = no+no2)
 
 ```
+
+### Exercise!
+
+  - Reading in data exercise
 
 ## Basic Statistical Analysis
 
@@ -410,21 +410,19 @@ abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = "red")
 library(dplyr)
 library(lubridate)
 
-setwd("C:/Users/Will/Google Drive/r_projects/wacl_r_intro/")
-
-no = read.csv("data/part_1/MY1_no_2018.csv") %>% 
+no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) 
 
-no2 = read.csv("data/part_1/MY1_no2_2018.csv") %>% 
+no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/part_1/MY1_o3_2018.csv") %>% 
+o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/part_1/MY1_met_2018.csv") %>% 
+met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) %>% 
   select(-X)
@@ -442,11 +440,17 @@ plot(dat$no,dat$nox)
 abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = "red")
 ```
 
+### Exercise!
+
+  - Statistics exercise
+
 ## Using `openair` for Air Quality Data
 
 ### Walkthrough
 
 This is a pretty open section on what openair can do.
+
+**Afterwords mention Vignettes?**
 
 ```{r}
 library(openair)
@@ -505,22 +509,20 @@ library(dplyr)
 library(lubridate)
 library(openair)
 
-setwd("C:/Users/Will/Google Drive/r_projects/wacl_r_intro/")
-
-no = read.csv("data/part_1/MY1_no_2018.csv") %>% 
+no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) 
 
 
-no2 = read.csv("data/part_1/MY1_no2_2018.csv") %>% 
+no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/part_1/MY1_o3_2018.csv") %>% 
+o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/part_1/MY1_met_2018.csv") %>% 
+met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
   tibble() %>% 
   mutate(date = ymd_hms(date)) %>% 
   select(-X)
@@ -552,6 +554,10 @@ timeVariation(dat, pollutant = c("no","no2","o3"))
 polarPlot(dat, pol = "no")
 ```
 
+### Exercise!
+
+  - openair exercise
+
 # Day 2 (Long)
 
 ## Reading trickier data
@@ -565,13 +571,12 @@ polarPlot(dat, pol = "no")
 ```{r}
 library(dplyr)
 library(lubridate)
-library(here)
 library(stringr)
 
-files = list.files(here("data","part_2"))
+files = list.files("data/taught/part_2")
 
 # instead of writing the path each time, lets be lazy!
-files = list.files(here("data","part_2"), full.names = T)
+files = list.files("data/taught/part_2", full.names = T)
 
 cll2 = read.csv(files[1]) %>% 
   tibble()
@@ -591,18 +596,61 @@ kc1 = read.csv(files[3]) %>%
   select(-X) %>% 
   mutate(date = ymd_hms(date))
 
+my1 = read.csv(files[5]) %>% 
+  tibble() %>% 
+  select(-X) %>% 
+  mutate(date = ymd_hms(date))
+
+# This errors!
 lon6 = read.csv(files[4]) %>% 
   tibble() %>% 
   select(-X) %>% 
   mutate(date = ymd_hms(date))
 
-my1 = read.csv(files[5]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
-  mutate(date = ymd_hms(date))
 ```
 
--  If we want to join these, we need to be able to tell them apart....
+- Discuss Unix time, if you ever come across a long integer that starts like this it's likely in Unix time
+
+```{r}
+lon6 = read.csv(files[4]) %>% 
+  tibble()
+lon6
+```
+
+- Can parse using `as_datetime` rather than `ymd_hms`.
+
+```{r}
+lon6 = read.csv(files[4]) %>% 
+  tibble() %>% 
+  select(-X) %>% 
+  mutate(date = as_datetime(date))
+```
+
+- Can combine sites using `left_join` as saw yesterday but produces by default ugly column names
+
+```{r}
+cll2 |>
+  left_join(kc1, by='date')
+```
+
+- Can fix with the `suffix` argument, but already with just 2 sites have 7 columns, will be hard to work with when add more!
+- Will come back to this at the end of the exercise to highlight a more efficient way of structuring our data
+- TODO Is there a killer motivating reason to use tidy data that will click before they've gotten onto vectorisation / plotting?
+
+```{r}
+cll2 |>
+  left_join(kc1, by='date', suffix=c("_cll2", "_kc1"))
+```
+
+- "Tidy data" prefers to have 1 row per observation and use column values to explicitly reference sites
+- Makes it easier for plotting and certain types of analysis
+
+```{r}
+rbind(
+  cll2 |> mutate(site = 'cll2'),
+  kc1 |> mutate(site = 'kc1')
+)
+```
 
 
 ```{r}
@@ -627,7 +675,7 @@ kc1 = read.csv(files[3]) %>%
 lon6 = read.csv(files[4]) %>% 
   tibble() %>% 
   select(-X) %>% 
-  mutate(date = ymd_hms(date),
+  mutate(date = as_datetime(date),
          site = "lon6")
 
 my1 = read.csv(files[5]) %>% 
@@ -686,59 +734,82 @@ Flow control - can we be lazier?
 ```{r}
 
 
-for(i in 1:length(files)){ # talk through what a loop is doing
+
+for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
   # two problems, how do we stop overwriting the previous data?
-  dat = read.csv(files[i]) %>% 
-    tibble() %>% 
-    select(-X) %>% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == "missing", NA, no) %>% 
-             as.numeric(),
-           site = "kc1") # how do we address the site issue?
+  dat = read.csv(files[i]) %>%
+    tibble() %>%
+    select(-X) %>%
+    mutate(
+      date = ymd_hms(date),
+      no = ifelse(no == "missing", NA, no) %>%
+        as.numeric(),
+      site = "kc1"
+    ) # how do we address the site issue?
 }
 
 
 # The storage issue -------------------------------------------------------
 
 datList = list()
-for(i in 1:length(files)){ # talk through what a loop is doing
+for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
-  datList[[i]] = read.csv(files[i]) %>% 
-    tibble() %>% 
-    select(-X) %>% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == "missing", NA, no) %>% 
-             as.numeric(),
-           site = "kc1") 
+  datList[[i]] = read.csv(files[i]) %>%
+    tibble() %>%
+    select(-X) %>%
+    mutate(
+      date = ymd_hms(date),
+      no = ifelse(no == "missing", NA, no) %>%
+        as.numeric(),
+      site = "kc1"
+    )
 }
 
 dat = bind_rows(list)
-# OR
 
-for(i in 1:length(files)){ # talk through what a loop is doing
+# But really we only want to coerce the NA for the KCL site
+
+datList = list()
+for (i in 1:length(files)) {
+  # talk through what a loop is doing
   
-  if(i == 1){
-    dat = read.csv(files[i]) %>% 
-      tibble() %>% 
-      select(-X) %>% 
-      mutate(date = ymd_hms(date),
-             no = ifelse(no == "missing", NA, no) %>% 
-               as.numeric(),
-             site = "kc1") 
-  }else{
-    temp = read.csv(files[i]) %>% 
-      tibble() %>% 
-      select(-X) %>% 
-      mutate(date = ymd_hms(date),
-             no = ifelse(no == "missing", NA, no) %>% 
-               as.numeric(),
-             site = "kc1") 
-    
-    dat = bind_rows(dat,temp)
+  # We know that KC1 is the third site, we will make this more explicit shortly
+  if (i == 3) {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(
+        date = ymd_hms(date),
+        no = ifelse(no == "missing", NA, no) %>%
+          as.numeric(),
+        site = "kc1"
+      )
+  # LON6 is 4th site, need to parse as_datetime
+  } else if (i == 4) {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(
+        date = as_datetime(date),
+        site = "lon6"
+      )
+  } else {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(
+        date = ymd_hms(date),
+        site = "kc1"
+      )
   }
-  
 }
+dat = bind_rows(datList)
+# Ah but only have 2 sites, kc1 and lon6!
+# Because in the 'else' we don't know what site we're on
+dat |> count(site)
 ```
 
 Fixing the sites.
@@ -752,39 +823,61 @@ Fixing the sites.
 
 someText = "The quick brown fox jumped over the lazy dog"
 
-word(someText,start = 2)
+word(someText, start = 2)
 
 someMoreText = "The_quick_brown_underscore_separated_dog"
 
 word(someMoreText)
 
-word(someMoreText,sep = "_")
+word(someMoreText, sep = "_")
 
-word(someMoreText,start = 3,sep = "_")
+word(someMoreText, start = 3, sep = "_")
 
-list.files(here("data","part_2"))
+list.files("data/taught/part_2")
 
-sites = list.files(here("data","part_2")) %>% 
-  word(1,sep = "_")
+sites = list.files("data/taught/part_2") %>%
+  word(1, sep = "_")
 
 # compact loop from earlier
 
 datList = list()
 
-for(i in 1:length(files)){
-  
-  datList[[i]] = read.csv(files[i]) %>% 
-    tibble() %>% 
-    select(-X) %>% 
-    mutate(date = ymd_hms(date),
-           no = ifelse(no == "missing", NA, no) %>% 
-             as.numeric(),
-           site = sites[i]) 
+for (i in 1:length(files)) {
+  # Handle KC1 missing data
+  if (sites[i] == 'KC1') {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(
+        date = ymd_hms(date),
+        no = ifelse(no == "missing", NA, no) %>%
+          as.numeric(),
+        site = sites[i]
+      )
+    # Handle LON6 different timestamp
+  } else if (sites[i] == 'LON6') {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(date = as_datetime(date),
+             site = sites[i])
+  } else {
+    datList[[i]] = read.csv(files[i]) %>%
+      tibble() %>%
+      select(-X) %>%
+      mutate(date = ymd_hms(date),
+             site = sites[i])
+  }
 }
 
 dat = bind_rows(datList)
-
+# Have all sites!
+dat |> count(site)
 ```
+
+### Exercise!
+
+  - Reading in data exercise
 
 ## Manipulating, Reshaping and Summarising Data
 
@@ -870,6 +963,25 @@ dat_long %>%
             sd   =   sd(conc, na.rm = T))
 ```
 
+- Show how much easier that is than writing out summary for every column in wide!
+- And can then compare directly against each other
+
+```{r}
+dat_wide <- cll2 |> left_join(lon6, by='date', suffix=c("_cll2", "_lon6"))
+mean(dat_wide$no_cll2, na.rm=T)
+mean(dat_wide$no2_cll2, na.rm=T)
+mean(dat_wide$o3_cll2, na.rm=T)
+mean(dat_wide$no_lon6, na.rm=T)
+mean(dat_wide$no2_lon6, na.rm=T)
+mean(dat_wide$o3_lon6, na.rm=T)
+sd(dat_wide$no_cll2, na.rm=T)
+sd(dat_wide$no2_cll2, na.rm=T)
+sd(dat_wide$o3_cll2, na.rm=T)
+sd(dat_wide$no_lon6, na.rm=T)
+sd(dat_wide$no2_lon6, na.rm=T)
+sd(dat_wide$o3_lon6, na.rm=T)
+```
+
 Also works with mutate.
 
 ```{r}
@@ -881,12 +993,28 @@ dat_long %>%
 
 Reshaped data good for filtering.
 
+- **NB: Difference between `=` and `==`
+
 ```{r}
 dat_long %>% 
   filter(site == "CLL2")
 
 dat_long %>% 
   filter(site %in% c("CLL2", "MY1", "somewhere_else"))
+```
+
+- Filtering much easier on tidy data too! Find all times when had NO > 10ppb
+
+```{r}
+# Easy in tidy
+dat_long |>
+  filter (species == 'no', conc > 10)
+
+# In wide have to specify each column!
+# Doesn't scale with number of sites!
+dat_wide |>
+  filter(no_cll2 > 10 | no_lon6 > 60 ...)
+
 ```
 
 Grouped data also works with filter!
@@ -899,103 +1027,28 @@ dat_long %>%
 
 Can pivot wider again...
 
+- One level of wide, tidy on site but wide on species
+
 ```{r}
 dat_long %>% 
-  filter(site == "CLL2") %>% 
-  select(-site) %>% 
+  filter(site %in% c("CLL2", "LON6")) %>% 
   pivot_wider(names_from = species, values_from = conc)
 ```
 
-## Using `ggplot2` for data visualisation
+- Two levels of wide on both site and species
 
-This section, much like the `openair` one from before, is much looser.
-
-Could start with wide data:
+**NB: This is what we had when we did that `left_join` at the start**
 
 ```{r}
-df # what might we want to plot?
-
-df_daily = timeAverage(df, "day")
-
-ggplot(df_daily) # nothing happens
-
-ggplot(df_daily) + 
-  aes(x = date) # we have an axis!
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) # both axes
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) +
-  geom_line() # a plot!
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) +
-  geom_line() +
-  labs(x = "Date", y = "NOx (ppb)") # is that the right unit?
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) +
-  geom_line(color = "cadetblue") +
-  labs(x = "Date", y = "NOx (ppb)") +
-  theme_bw() # finesse 
-
-ggplot(df_daily) + 
-  aes(x = date, y = nox) +
-  geom_line(alpha = .5, color = "cadetblue") +
-  geom_point(color = "cadetblue") +
-  geom_smooth(color = "black", lty = 2) +
-  labs(x = "Date", y = "NOx (ppb)") +
-  theme_bw() # layer geometries
-
+dat_long %>% 
+  filter(site %in% c("CLL2", "LON6")) %>% 
+  pivot_wider(names_from = c(site, species), values_from = conc)
 ```
 
-Then move on to long:
+### Exercise!
 
-```{r}
-df_daily_long = df %>%
-  timeAverage(avg.time = "day", type = "site") %>%
-  pivot_longer(-c(site, date), names_to = "species", values_to = "conc")
+  - Data manipulation exercise
 
-df_daily_long %>%
-  filter(species == "no2") %>%
-  ggplot() +
-  aes(x = date, y = conc) +
-  geom_line() # mixed up!
+## Real World Exercise
 
-df_daily_long %>%
-  filter(species == "no2") %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() #that's better!
-
-df_daily_long %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() +
-  facet_wrap(~species) # faceting
-
-df_daily_long %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() +
-  facet_wrap(~species, scales = "free_y", ncol = 1) # free scales, ncol, etc.
-
-df_daily_long %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() +
-  facet_grid(site~species, scales = "free") # or use grid!
-
-
-df_daily_long %>%
-  ggplot() +
-  aes(x = date, y = conc, color = site) +
-  geom_line() +
-  facet_grid(species~., scales = "free_y") +
-  theme_bw() +
-  theme(legend.position = "top") +
-  labs(x = "Date", y = "Concentration (ppb)", color = "Site") # good theming
-
-```
-
+Follow through with Real World Exercise section
