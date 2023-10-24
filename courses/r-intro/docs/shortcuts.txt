@@ -1,0 +1,9 @@
+This file contains a list of useful shortcuts in RStudio.
+Feel free to add your own as you discover them.
+
+Move cursor to Console - Ctrl + 2
+Move cursor to Editor - Ctrl + 1
+Execute current line of code - Ctrl + Enter
+Find and Replace - Ctrl + Shift + f
+Autocomplete R object name - Tab (after having typed at least 1 character)
+Autocomplete file path - Tab (after having opened quotation marks)
