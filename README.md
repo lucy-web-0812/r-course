@@ -26,7 +26,7 @@ The `courses/r-intro` folder is structured as follows:
 
   - `data`: Contains all data needed in the course
   - `docs`: Contains all presentations and notes used in delivering the course
-  - `scripts`: Where you will write your R code
+  - `scripts`: Where you will write your R code in the corresponding year's folder, in the file named with the corresponding day.
   - `feedback`: Feedback from previous sessions (TODO put solely in Google Drive)
   - `exercise_answers.R`: Answers to the exercises, please don't look unless you get extremely stuck
   - `get_data.R`: Script for downloading the datasets again if needed
