@@ -27,142 +27,7 @@ This document is not for learners to see. This is to act as a reference while te
 
 No code in this document is evaluated.
 
-# Day 1 (Wide)
-
-## Getting Comfortable with R
-
-This section does not generate a script.
-
-### Console
-
--   Explain what the console is for.
-
--   Type some mathematical and logical operators into the console.
-
--   Draw attention to how to use the console, and what the console does (prints things).
-
--   Draw attention to what the console doesn't do ("save" data - leads onto next section)
-
-```{r}
-5 + 5
-
-2 * 10
-
-20 / 4
-
-3 ^ 2
-
-5 > 5
-
-10 == 10
-```
-
-### Global Env
-
--  Assign something to it
-
--  Note: no printing to console, but appears in env.
-
--  Do something to variable
-
-```{r}
-a = 5
-
-5 * 10
-
-a * 10
-
-a == 5
-
-a < 10
-
-b = 10
-
-f = a * b
-
-```
-
-### Data Structures
-
--  Show c() and a data frame (e.g., mtcars/iris/w/e)
-
--  Vector
-  -  1D
-  -  make sequence (e.g., 1-5)
-  -  use function (mean/sum/etc.)
-  -  use something vectorised (e.g. sqrt)
-
--  Dataframe
-  -  2D (rows, columns)
-  -  square brakets for indexing...
-  -  dollar to index named column
-  -  do a function on a column (each column is a vector)
-
-```{r}
-0:10
-
-vec = 0:10
-
-char_vec = c("Jack", "Will", "David", "James")
-
-vec[3]
-
-mean(vec)
-
-sqrt(vec)
-
-toupper(char_vec)
-```
-
-```{r}
-iris
-
-iris[1]
-
-#iris[row,col]
-
-iris[1:3]
-
-iris[5,]
-
-iris["Sepal.Length"]
-
-iris$Sepal.Length
-
-mean(iris$Sepal.Length)
-
-```
-
-### Script Editor
-
--  Write something in script, save, close, reopen
-
--  Talk about philosophy of scripting (compare to Excel)
-  -  Reproducibility
-  -  Automation
-  -  Some journals ask for code!
-  -  leaving raw data alone
-  -  structuring projects
-
-### Packages
-
--  Functionality extends further than "base"
-
--  Install a package, show the list in packages pane
-
--  Use something from package
-  -  Start with colons
-  -  then library()
-  -  (use count from dplyr or something else)
-  
-### Other stuff
-
--  Help 
-
--  Plots
-
--  Files
-
+# Morning session: Reading data & stats
 
 ## Reading and Interrogating Data
 
@@ -170,14 +35,16 @@ mean(iris$Sepal.Length)
 
 -   Setting up a project
 
+-   RStudio setup: environemnt + base pipe
+
 -   Use of `read.csv()`
 
 -   Printing to the console.
 
 ```{r}
-no = read.csv("data/taught/part_1/MY1_no_2018.csv")
+my1_no = read.csv("data/taught/part_1/MY1_no_2018.csv")
 
-no
+my1_no
 ```
 
 Viewing data.
@@ -191,21 +58,28 @@ Viewing data.
 ```{r}
 library(dplyr)
 
-glimpse(no)
-View(no)
+glimpse(my1_no)
+View(my1_no)
 
-tibble(no)
+tibble(my1_no)
 
-no = tibble(no)
+my1_no = tibble(my1_no)
 
 ```
 
 Use of the pipe.
 
 ```{r}
-no = tibble(no)
+# Functionally the same! Why use pipe?
+tibble(my1_no)
+my1_no |> tibble()
 
-no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
+# Without pipe
+my1_no = read.csv("data/taught/part_1/MY1_no_2018.csv") 
+my1_no = tibble(my1_no)
+
+# With pipe we don't have to create intermediate variables
+my1_no = read.csv("data/taught/part_1/MY1_no_2018.csv") |> 
   tibble()
 
 ```
@@ -214,24 +88,24 @@ Talk about data types.
 
 -  Indexing a column (refresh from before.)
 
--  "no" is fine.
+-  `no` is fine.
 
--  "date" is not.
+-  `date` is not.
 
 -  Use of `lubridate` - what is it? (part of tidyverse - make link)
 
 ```{r}
-class(no$no)
+class(my1_no$no)
 
-class(no$date)
+class(my1_no$date)
 
 library(lubridate)
 
-no$date = ymd_hms(no$date)
+my1_no$date = ymd_hms(my1_no$date)
 
-no
+my1_no
 
-class(no$date)
+class(my1_no$date)
 ```
 
 Initial merge.
@@ -243,9 +117,12 @@ Initial merge.
 -  Base R plot - not pretty, but good for double checking
 
 ```{r}
-no_no2 = left_join(no, no2, by = "date")
+my1_no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv")
+my1_no2$date = ymd_hms(my1_no2$date)
 
-plot(no_no2$no, no_no2$no2)
+my1 = left_join(my1_no, my1_no2, by = "date")
+
+plot(my1_$no, my1_$no2)
 ```
 
 Many merge.
@@ -253,12 +130,12 @@ Many merge.
 -  Compare many functions vs. pipeline.
 
 ```{r}
-no_no2_o3 = left_join(no_no2, o3, by = "date") # tedious!
+my1 = left_join(my1_no, my1_o3, by = "date") # tedious!
 
-dat = no %>% 
-  left_join(no2, by = "date") %>% 
-  left_join(o3, by = "date") %>% 
-  left_join(met, by = "date")
+my1 = my1_no |> 
+  left_join(my1_no2, by = "date") |> 
+  left_join(my1_o3, by = "date") |> 
+  left_join(my1_met, by = "date")
 ```
 
 ### Script Update
@@ -267,27 +144,27 @@ dat = no %>%
 library(dplyr)
 library(lubridate)
 
-no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
-  tibble() %>% 
+my1_no = read.csv("data/taught/part_1/MY1_no_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date)) 
 
-no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
-  tibble() %>% 
+my1_no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
-  tibble() %>% 
+my1_o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
-  tibble() %>% 
-  mutate(date = ymd_hms(date)) %>% 
+my1_met = read.csv("data/taught/part_1/MY1_met_2018.csv") |> 
+  tibble() |> 
+  mutate(date = ymd_hms(date)) |> 
   select(-X)
 
-dat = no %>% 
-  left_join(no2, by = "date") %>% 
-  left_join(o3, by = "date") %>% 
-  left_join(met, by = "date") %>%
+my1 = my1_no |> 
+  left_join(my1_no2, by = "date") |> 
+  left_join(my1_o3, by = "date") |> 
+  left_join(my1_met, by = "date") |>
   mutate(nox = no+no2)
 
 ```
@@ -309,11 +186,11 @@ Use of `mean`.
 -  Warn about being sensible - averaging wind direction isn't obvious, R can't read minds.
 
 ```{r}
-mean(dat$no)
+mean(my1$no)
 
-mean(dat$no, na.rm = T)
+mean(my1$no, na.rm = T)
 
-mean(dat$wind_direction, na.rm = T) # averaging wind direction warning
+mean(my1$wind_direction, na.rm = T) # averaging wind direction warning
 
 ```
 
@@ -322,17 +199,17 @@ Other statistical tools.
 -  Reinforce what these return (range returns a vector, analogue to max and min)
 
 ```{r}
-median(dat$o3, na.rm = T)
+median(my1$o3, na.rm = T)
 
-sd(dat$wind_speed, na.rm = T)
+sd(my1$wind_speed, na.rm = T)
 
-range(dat$nox, na.rm = T)
+range(my1$nox, na.rm = T)
 ```
 
 Exploratory visualisations.
 
 ```{r}
-hist(dat$no)
+hist(my1$no)
 ```
 
 Histogram nice but arbitrary, density functions are also useful. Build up:
@@ -344,20 +221,20 @@ Histogram nice but arbitrary, density functions are also useful. Build up:
 -  Use generic "plot" function to plot.
 
 ```{r}
-density(dat$no)
+density(my1$no)
 
-na.omit(dat$no) %>% 
+na.omit(my1$no) |> 
   density()
 
-na.omit(dat$no) %>% 
-  density() %>% 
+na.omit(my1$no) |> 
+  density() |> 
   plot()
 ```
 
 Correlation - classic scatter plot.
 
 ```{r}
-plot(dat$no,dat$nox)
+plot(my1$no,my1$nox)
 ```
 
 Basic modelling to get an R Squared. 
@@ -377,9 +254,9 @@ Basic modelling to get an R Squared.
 ```{r}
 ?lm
 
-lm(formula = nox~no, data = dat)
+lm(formula = nox~no, data = my1)
 
-linearModel = lm(dat$nox~dat$no)
+linearModel = lm(my1$nox~my1$no)
 
 coef(linearModel)
 
@@ -397,7 +274,7 @@ Plot our line of best fit.
 -  Layer on the abline (to show the model is doing what we think it is!)
 
 ```{r}
-plot(dat$no,dat$nox)
+plot(my1$no,my1$nox)
 
 ?abline
 
@@ -410,33 +287,33 @@ abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = "red")
 library(dplyr)
 library(lubridate)
 
-no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
-  tibble() %>% 
+my1_no = read.csv("data/taught/part_1/MY1_no_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date)) 
 
-no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
-  tibble() %>% 
+my1_no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
-  tibble() %>% 
+my1_o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
-  tibble() %>% 
-  mutate(date = ymd_hms(date)) %>% 
+my1_met = read.csv("data/taught/part_1/MY1_met_2018.csv") |> 
+  tibble() |> 
+  mutate(date = ymd_hms(date)) |> 
   select(-X)
 
-dat = no %>% 
-  left_join(no2, by = "date") %>% 
-  left_join(o3, by = "date") %>% 
-  left_join(met, by = "date") %>%
+my1 = my1_no |> 
+  left_join(my1_no2, by = "date") |> 
+  left_join(my1_o3, by = "date") |> 
+  left_join(my1_met, by = "date") |>
   mutate(nox = no+no2)
 
 # plot nox~no linear model
-linearModel = lm(dat$nox~dat$no)
+linearModel = lm(my1$nox~my1$no)
 
-plot(dat$no,dat$nox)
+plot(my1$no,my1$nox)
 abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = "red")
 ```
 
@@ -456,49 +333,50 @@ This is a pretty open section on what openair can do.
 library(openair)
 
 # the wind direction averaging point could be linked here, but it might be a bit subtle? could circle back later
-summaryPlot(dat)
+summaryPlot(my1)
 
-timePlot(dat, pollutant = "no")
+timePlot(my1, pollutant = "no")
 
-timePlot(dat, pollutant = c("no","no2")) # making the assumption that c() has been taught already
+timePlot(my1, pollutant = c("no","no2")) # making the assumption that c() has been taught already
 
-timePlot(dat, pollutant = c("no","no2"), y.relation = "free")
+timePlot(my1, pollutant = c("no","no2"), y.relation = "free")
 
-timePlot(dat, pollutant = c("no","no2"), y.relation = "free", avg.time = "1 day")
+timePlot(my1, pollutant = c("no","no2"), y.relation = "free", avg.time = "1 day")
 
 
-dat_daily = timeAverage(dat,"1 day")
+my1_daily = timeAverage(my1,"1 day")
 
 # time to bring up renaming ws and wd
 
-dat_daily$wind_direction %>% 
+my1_daily$wind_direction |> 
   hist(breaks = 100)
 
-dat = dat %>% 
+my1 = my1 |> 
   rename(ws = wind_speed, 
          wd = wind_direction)
 
-dat_daily2 = timeAverage(dat,"1 day")
+my1_daily2 = timeAverage(my1, "1 day")
 
-dat_daily2$wd %>% 
-  hist(breaks = 100,add = T,
+my1_daily2$wd |> 
+  hist(breaks = 100,
+       add = T,
        col = "red")
 
-timeVariation(dat, pollutant = c("no","no2","o3"))
+timeVariation(my1, pollutant = c("no","no2","o3"))
 
-timeVariation(dat, pollutant = c("no","no2","o3"), type = "season")
+timeVariation(my1, pollutant = c("no","no2","o3"), type = "season")
 
-dat_tv = timeVariation(dat, pollutant = c("no","no2","o3"))
+my1_tv = timeVariation(my1, pollutant = c("no","no2","o3"))
 
-dat_tv$data$hour # make them aware of this? its long data though so a day 2 thing to do in detail?
+my1_tv$data$hour # make them aware of this? its long data though so a day 2 thing to do in detail?
 
-windRose(dat) # ws and wd already formatted :)
+windRose(my1) # ws and wd already formatted :)
 
-windRose(dat,paddle = F)
+windRose(my1,paddle = F)
 
-polarPlot(dat, pol = "no") # go to google maps for a quick chat about what it means
+polarPlot(my1, pol = "no") # go to google maps for a quick chat about what it means
 
-corPlot(dat) #?
+corPlot(my1) #?
 
 ```
 
@@ -509,56 +387,56 @@ library(dplyr)
 library(lubridate)
 library(openair)
 
-no = read.csv("data/taught/part_1/MY1_no_2018.csv") %>% 
-  tibble() %>% 
+my1_no = read.csv("data/taught/part_1/MY1_no_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date)) 
 
 
-no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") %>% 
-  tibble() %>% 
+my1_no2 = read.csv("data/taught/part_1/MY1_no2_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date))
 
-o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") %>% 
-  tibble() %>% 
+my1_o3 = read.csv("data/taught/part_1/MY1_o3_2018.csv") |> 
+  tibble() |> 
   mutate(date = ymd_hms(date))
 
-met = read.csv("data/taught/part_1/MY1_met_2018.csv") %>% 
-  tibble() %>% 
-  mutate(date = ymd_hms(date)) %>% 
+my1_met = read.csv("data/taught/part_1/MY1_met_2018.csv") |> 
+  tibble() |> 
+  mutate(date = ymd_hms(date)) |> 
   select(-X)
 
-dat = no %>% 
-  left_join(no2, by = "date") %>% 
-  left_join(o3, by = "date") %>% 
-  left_join(met, by = "date") %>%
-  mutate(nox = no+no2) %>% 
+my1 = my1_no |> 
+  left_join(my1_no2, by = "date") |> 
+  left_join(my1_o3, by = "date") |> 
+  left_join(my1_met, by = "date") |>
+  mutate(nox = no+no2) |> 
   rename(ws = wind_speed,
          wd = wind_direction)
 
 # plot nox~no linear model
-linearModel = lm(dat$nox~dat$no)
+linearModel = lm(my1$nox~my1$no)
 
-plot(dat$no,dat$nox)
+plot(my1$no,my1$nox)
 abline(a = coef(linearModel)[1], b = coef(linearModel)[2], col = "red")
 
 # plot daily average no and no2
 
-timePlot(dat, pollutant = c("no","no2"), y.relation = "free", avg.time = "1 day")
+timePlot(my1, pollutant = c("no","no2"), y.relation = "free", avg.time = "1 day")
 
 # plot diurnals
 
-timeVariation(dat, pollutant = c("no","no2","o3"))
+timeVariation(my1, pollutant = c("no","no2","o3"))
 
 # plot polar
 
-polarPlot(dat, pol = "no")
+polarPlot(my1, pol = "no")
 ```
 
 ### Exercise!
 
   - openair exercise
 
-# Day 2 (Long)
+# Afternoon: Flow control and tidy data
 
 ## Reading trickier data
 
@@ -578,33 +456,33 @@ files = list.files("data/taught/part_2")
 # instead of writing the path each time, lets be lazy!
 files = list.files("data/taught/part_2", full.names = T)
 
-cll2 = read.csv(files[1]) %>% 
+cll2 = read.csv(files[1]) |> 
   tibble()
 
-cll2 = read.csv(files[1]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+cll2 = read.csv(files[1]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date))
 
-hors = read.csv(files[2]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+hors = read.csv(files[2]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date))
 
-kc1 = read.csv(files[3]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+kc1 = read.csv(files[3]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date))
 
-my1 = read.csv(files[5]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+my1 = read.csv(files[5]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date))
 
 # This errors!
-lon6 = read.csv(files[4]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+lon6 = read.csv(files[4]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date))
 
 ```
@@ -612,7 +490,7 @@ lon6 = read.csv(files[4]) %>%
 - Discuss Unix time, if you ever come across a long integer that starts like this it's likely in Unix time
 
 ```{r}
-lon6 = read.csv(files[4]) %>% 
+lon6 = read.csv(files[4]) |> 
   tibble()
 lon6
 ```
@@ -620,9 +498,9 @@ lon6
 - Can parse using `as_datetime` rather than `ymd_hms`.
 
 ```{r}
-lon6 = read.csv(files[4]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+lon6 = read.csv(files[4]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = as_datetime(date))
 ```
 
@@ -654,33 +532,33 @@ rbind(
 
 
 ```{r}
-cll2 = read.csv(files[1]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+cll2 = read.csv(files[1]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date),
          site = "cll2")
 
-hors = read.csv(files[2]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+hors = read.csv(files[2]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date),
          site = "hors")
 
-kc1 = read.csv(files[3]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+kc1 = read.csv(files[3]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date),
          site = "kc1")
 
-lon6 = read.csv(files[4]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+lon6 = read.csv(files[4]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = as_datetime(date),
          site = "lon6")
 
-my1 = read.csv(files[5]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+my1 = read.csv(files[5]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date),
          site = "my1")
 ```
@@ -692,7 +570,7 @@ Binding.
 -  Mutate no to be numeric (or just use the na argument of read.csv...)
 
 ```{r}
-dat = bind_rows(cll2, hors, kc1, lon6, my1)
+all_sites = bind_rows(cll2, hors, kc1, lon6, my1)
 # errs on kc1
 cll2
 
@@ -702,9 +580,9 @@ kc1 # ahah!
 
 # lets fix kc1s read
 
-kc1 = read.csv(files[3]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+kc1 = read.csv(files[3]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date),
          no = as.numeric(no),
          site = "kc1")
@@ -712,15 +590,15 @@ kc1 = read.csv(files[3]) %>%
 # hmmm, warnings are ok, but you can end up with side effects
 # can we be better?
 
-kc1 = read.csv(files[3]) %>% 
-  tibble() %>% 
-  select(-X) %>% 
+kc1 = read.csv(files[3]) |> 
+  tibble() |> 
+  select(-X) |> 
   mutate(date = ymd_hms(date),
-         no = ifelse(no == "missing", NA, no) %>% 
+         no = ifelse(no == "missing", NA, no) |> 
            as.numeric(),
          site = "kc1")
 
-dat = bind_rows(cll2, hors, kc1, lon6, my1) #yay
+all_sites = bind_rows(cll2, hors, kc1, lon6, my1) #yay
 ```
 
 Flow control - can we be lazier?
@@ -732,19 +610,16 @@ Flow control - can we be lazier?
 -  What is the benefit of working this way? (compare to Excel - what happens if a new file appears? etc.)
 
 ```{r}
-
-
-
 for (i in 1:length(files)) {
   # talk through what a loop is doing
   
   # two problems, how do we stop overwriting the previous data?
-  dat = read.csv(files[i]) %>%
-    tibble() %>%
-    select(-X) %>%
+  dat = read.csv(files[i]) |>
+    tibble() |>
+    select(-X) |>
     mutate(
       date = ymd_hms(date),
-      no = ifelse(no == "missing", NA, no) %>%
+      no = ifelse(no == "missing", NA, no) |>
         as.numeric(),
       site = "kc1"
     ) # how do we address the site issue?
@@ -757,18 +632,18 @@ datList = list()
 for (i in 1:length(files)) {
   # talk through what a loop is doing
   
-  datList[[i]] = read.csv(files[i]) %>%
-    tibble() %>%
-    select(-X) %>%
+  datList[[i]] = read.csv(files[i]) |>
+    tibble() |>
+    select(-X) |>
     mutate(
       date = ymd_hms(date),
-      no = ifelse(no == "missing", NA, no) %>%
+      no = ifelse(no == "missing", NA, no) |>
         as.numeric(),
       site = "kc1"
     )
 }
 
-dat = bind_rows(list)
+all_sites = bind_rows(datList)
 
 # But really we only want to coerce the NA for the KCL site
 
@@ -778,38 +653,38 @@ for (i in 1:length(files)) {
   
   # We know that KC1 is the third site, we will make this more explicit shortly
   if (i == 3) {
-    datList[[i]] = read.csv(files[i]) %>%
-      tibble() %>%
-      select(-X) %>%
+    datList[[i]] = read.csv(files[i]) |>
+      tibble() |>
+      select(-X) |>
       mutate(
         date = ymd_hms(date),
-        no = ifelse(no == "missing", NA, no) %>%
+        no = ifelse(no == "missing", NA, no) |>
           as.numeric(),
         site = "kc1"
       )
   # LON6 is 4th site, need to parse as_datetime
   } else if (i == 4) {
-    datList[[i]] = read.csv(files[i]) %>%
-      tibble() %>%
-      select(-X) %>%
+    datList[[i]] = read.csv(files[i]) |>
+      tibble() |>
+      select(-X) |>
       mutate(
         date = as_datetime(date),
         site = "lon6"
       )
   } else {
-    datList[[i]] = read.csv(files[i]) %>%
-      tibble() %>%
-      select(-X) %>%
+    datList[[i]] = read.csv(files[i]) |>
+      tibble() |>
+      select(-X) |>
       mutate(
         date = ymd_hms(date),
         site = "kc1"
       )
   }
 }
-dat = bind_rows(datList)
+all_sites = bind_rows(datList)
 # Ah but only have 2 sites, kc1 and lon6!
 # Because in the 'else' we don't know what site we're on
-dat |> count(site)
+all_sites |> count(site)
 ```
 
 Fixing the sites.
@@ -835,7 +710,7 @@ word(someMoreText, start = 3, sep = "_")
 
 list.files("data/taught/part_2")
 
-sites = list.files("data/taught/part_2") %>%
+sites = list.files("data/taught/part_2") |>
   word(1, sep = "_")
 
 # compact loop from earlier
@@ -845,34 +720,34 @@ datList = list()
 for (i in 1:length(files)) {
   # Handle KC1 missing data
   if (sites[i] == 'KC1') {
-    datList[[i]] = read.csv(files[i]) %>%
-      tibble() %>%
-      select(-X) %>%
+    datList[[i]] = read.csv(files[i]) |>
+      tibble() |>
+      select(-X) |>
       mutate(
         date = ymd_hms(date),
-        no = ifelse(no == "missing", NA, no) %>%
+        no = ifelse(no == "missing", NA, no) |>
           as.numeric(),
         site = sites[i]
       )
     # Handle LON6 different timestamp
   } else if (sites[i] == 'LON6') {
-    datList[[i]] = read.csv(files[i]) %>%
-      tibble() %>%
-      select(-X) %>%
+    datList[[i]] = read.csv(files[i]) |>
+      tibble() |>
+      select(-X) |>
       mutate(date = as_datetime(date),
              site = sites[i])
   } else {
-    datList[[i]] = read.csv(files[i]) %>%
-      tibble() %>%
-      select(-X) %>%
+    datList[[i]] = read.csv(files[i]) |>
+      tibble() |>
+      select(-X) |>
       mutate(date = ymd_hms(date),
              site = sites[i])
   }
 }
 
-dat = bind_rows(datList)
+all_sites = bind_rows(datList)
 # Have all sites!
-dat |> count(site)
+all_sites |> count(site)
 ```
 
 ### Exercise!
@@ -890,12 +765,12 @@ Summaries.
 -  Can give multiple arguments for multiple returns.
 
 ```{r}
-mean(dat$nox, na.rm = T)
+mean(all_sites$nox, na.rm = T)
 
-dat %>% summarise(nox = mean(nox, na.rm = T))
+all_sites |> summarise(nox = mean(nox, na.rm = T))
 
-dat %>% summarise(mean_nox = mean(nox, na.rm = T),
-                 sd_nox   = sd(nox, na.rm = T))
+all_sites |> summarise(mean_nox = mean(nox, na.rm = T),
+                       sd_nox   = sd(nox, na.rm = T))
 ```
 
 Grouping.
@@ -907,18 +782,18 @@ Grouping.
 -  Can arrange a dat with `dplyr`.
 
 ```{r}
-dat %>% 
+all_sites |> 
   group_by(site)
 
-dat %>%
-  group_by(site) %>%
+all_sites |>
+  group_by(site) |>
   summarise(mean_nox = mean(nox, na.rm = T),
             sd_nox   = sd(nox, na.rm = T))
 
-dat %>%
-  group_by(site) %>%
+all_sites |>
+  group_by(site) |>
   summarise(mean_nox = mean(nox, na.rm = T),
-            sd_nox   = sd(nox, na.rm = T)) %>%
+            sd_nox   = sd(nox, na.rm = T)) |>
   arrange(mean_nox)
 ```
 
@@ -932,7 +807,7 @@ Reshaping.
   -  Totally wide data would look like the below output - currently we're in a strange middle ground that is not useful.
 
 ```{r}
-dat %>%
+all_sites |>
   tidyr::pivot_wider(names_from = site, values_from = no:o3)
 ```
 
@@ -945,20 +820,20 @@ dat %>%
 -  Using `select`-style syntax to select columns.
 
 ```{r}
-dat
+all_sites
 
-dat %>% pivot_longer(no:o3, names_to = "species", values_to = "conc")
+all_sites |> pivot_longer(no:o3, names_to = "species", values_to = "conc")
 
-dat %>% pivot_longer(-c(site, date), names_to = "species", values_to = "conc") # another way of doing it
+all_sites |> pivot_longer(-c(site, date), names_to = "species", values_to = "conc") # another way of doing it
 
-dat_long = dat %>% pivot_longer(-c(site, date), names_to = "species", values_to = "conc")
+all_sites_long = all_sites |> pivot_longer(-c(site, date), names_to = "species", values_to = "conc")
 ```
 
 Reshaped data - good for use for summaries.
 
 ```{r}
-dat_long %>%
-  group_by(site, species) %>%
+all_sites_long |>
+  group_by(site, species) |>
   summarise(mean = mean(conc, na.rm = T),
             sd   =   sd(conc, na.rm = T))
 ```
@@ -967,26 +842,26 @@ dat_long %>%
 - And can then compare directly against each other
 
 ```{r}
-dat_wide <- cll2 |> left_join(lon6, by='date', suffix=c("_cll2", "_lon6"))
-mean(dat_wide$no_cll2, na.rm=T)
-mean(dat_wide$no2_cll2, na.rm=T)
-mean(dat_wide$o3_cll2, na.rm=T)
-mean(dat_wide$no_lon6, na.rm=T)
-mean(dat_wide$no2_lon6, na.rm=T)
-mean(dat_wide$o3_lon6, na.rm=T)
-sd(dat_wide$no_cll2, na.rm=T)
-sd(dat_wide$no2_cll2, na.rm=T)
-sd(dat_wide$o3_cll2, na.rm=T)
-sd(dat_wide$no_lon6, na.rm=T)
-sd(dat_wide$no2_lon6, na.rm=T)
-sd(dat_wide$o3_lon6, na.rm=T)
+all_sites_wide <- cll2 |> left_join(lon6, by='date', suffix=c("_cll2", "_lon6"))
+mean(all_sites_wide$no_cll2, na.rm=T)
+mean(all_sites_wide$no2_cll2, na.rm=T)
+mean(all_sites$o3_cll2, na.rm=T)
+mean(all_sites$no_lon6, na.rm=T)
+mean(all_sites$no2_lon6, na.rm=T)
+mean(all_sites$o3_lon6, na.rm=T)
+sd(all_sites$no_cll2, na.rm=T)
+sd(all_sites$no2_cll2, na.rm=T)
+sd(all_sites$o3_cll2, na.rm=T)
+sd(all_sites$no_lon6, na.rm=T)
+sd(all_sites$no2_lon6, na.rm=T)
+sd(all_sites$o3_lon6, na.rm=T)
 ```
 
 Also works with mutate.
 
 ```{r}
-dat_long %>% 
-  group_by(site, species) %>% 
+all_sites_long |> 
+  group_by(site, species) |> 
   mutate(p95 = quantile(conc, .95, na.rm = T),
          flag = conc > p95)
 ```
@@ -996,10 +871,10 @@ Reshaped data good for filtering.
 - **NB: Difference between `=` and `==`
 
 ```{r}
-dat_long %>% 
+all_sites_long |> 
   filter(site == "CLL2")
 
-dat_long %>% 
+all_sites_long |> 
   filter(site %in% c("CLL2", "MY1", "somewhere_else"))
 ```
 
@@ -1007,12 +882,12 @@ dat_long %>%
 
 ```{r}
 # Easy in tidy
-dat_long |>
+all_sites_long |>
   filter (species == 'no', conc > 10)
 
 # In wide have to specify each column!
 # Doesn't scale with number of sites!
-dat_wide |>
+all_sites_wide |>
   filter(no_cll2 > 10 | no_lon6 > 60 ...)
 
 ```
@@ -1020,8 +895,8 @@ dat_wide |>
 Grouped data also works with filter!
 
 ```{r}
-dat_long %>%
-  group_by(site, species) %>%
+all_sites_long |>
+  group_by(site, species) |>
   filter(conc == max(conc, na.rm = T))
 ```
 
@@ -1030,8 +905,8 @@ Can pivot wider again...
 - One level of wide, tidy on site but wide on species
 
 ```{r}
-dat_long %>% 
-  filter(site %in% c("CLL2", "LON6")) %>% 
+all_sites_long |> 
+  filter(site %in% c("CLL2", "LON6")) |> 
   pivot_wider(names_from = species, values_from = conc)
 ```
 
@@ -1040,8 +915,8 @@ dat_long %>%
 **NB: This is what we had when we did that `left_join` at the start**
 
 ```{r}
-dat_long %>% 
-  filter(site %in% c("CLL2", "LON6")) %>% 
+all_sites_long |> 
+  filter(site %in% c("CLL2", "LON6")) |> 
   pivot_wider(names_from = c(site, species), values_from = conc)
 ```
 

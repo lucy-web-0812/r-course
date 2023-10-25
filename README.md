@@ -1,20 +1,36 @@
 # WACL R Intro
-Repository for WACL's Intro to R course. Contains:
 
-1. [course_r-intro](./course_r-intro/): containing all files for the R intro day(s).
+Materials for WACL's Intro to R Course.
+This course is split into 2 sessions: the first is a general introduction to R (`courses/r-intro`), and the second is a data visualization specific session (`courses/dataviz`).
 
-    1. [Data](./course_r-intro/data/); containing all taught data, exercise data and the cape verde "group exercise" data. All data (with the exception of the raw Cape Verde data) is acquired using [get_data.R](./get_data.R).
+Before attending the course, ideally you will have completed the following pre-requisites:
 
-    2. [Learning Materials](./course_r-intro/learning_materials/); containing all slides, reference documents, and answer scripts.
+  - Read through sections 1 & 2 of the self-help materials (TODO: Can we place this here?)
+  - Downloaded and installed [GitHub Desktop](https://desktop.github.com/)
+  - 'Cloned' a copy of this repository to your computer:
+    - Click the Green `Code` button and copy the `HTTPS` URL
+    - In RStudio click File -> New Project -> Version Control -> Git
+    - For the `Repository URL` copy the GitHub link
+    - It should populate the repository name text box
+    - Choose an appropriate top level folder. You might want to make a `repos` folder in your Documents or somewhere easily accessible to store future repositories in, or an `RProjects` folder
 
-    3. [Planning](./course_r-intro/planning/); containing all scripts used for planning.
+## R Introduction
 
-    4. [Reference](./course_r-intro/reference); containing reference documents for teaching.
+This session will take place over the course of a full day (10am-4pm) and will be split into 3 parts:
 
-    5. [Feedback](./course_r-intro/feedback); containing a summary of feedback recieved on the course.
+  - General familiarity working with data in R
+  - `openair` introduction
+  - Flow control and tidy data
+  
+The `courses/r-intro` folder is structured as follows:
 
-2. [workshop_dataviz](./workshop_dataviz/): containg all files for the data visualisation workshop.
+  - `data`: Contains all data needed in the course
+  - `docs`: Contains all presentations and notes used in delivering the course
+  - `scripts`: Where you will write your R code in the corresponding year's folder, in the file named with the corresponding day.
+  - `feedback`: Feedback from previous sessions (TODO put solely in Google Drive)
+  - `exercise_answers.R`: Answers to the exercises, please don't look unless you get extremely stuck
+  - `get_data.R`: Script for downloading the datasets again if needed
 
-3. [workshop_functions](./workshop_functions/): containg all files for the functional programming workshop.
+## Data Visualisation
 
-4. [workshop_stats](./workshop_stats/): containg all files for the statistical analysis workshop.
+Coming soon...
