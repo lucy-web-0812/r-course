@@ -1,7 +1,7 @@
 ---
 title: "WACL R Training"
 subtitle: Training for air pollution data analysis in R
-date: 28th & 29th Nov.
+date: 14th & 21st Nov 2023
 author: \textbf{Will Drysdale and Stuart Lacy}
 institute: "University of York"
 output: 
@@ -27,18 +27,19 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 ## Welcome!
 
-*A course over two afternoons for beginners with R*
+*A 2-day course introducing the R statistical programming language*
 
-- Introduction to R, RStudio and Programming for beginners
+- Introduction to R, RStudio and programming for beginners
 - Building a script; the benefits of programming over spreadsheets 
 - Reading, manipulating and visualising data, with tips and tricks to solve common problems
+- A focus on the types of skills you'll need for working with air quality data, using real-world datasets
 - Chance to practise skills with us on hand to help out
 
 ## Approaches
 
 - Authentic, live coding
-- All course material will be made available
-  - This will include all data and script files produced during this course
+- All course material is available on [GitHub](github.com/wacl-york/wacl_r_intro)
+  - Includes all data and script files produced during this course
   - A bespoke self-teaching document will also be made available
   - Useful for post-course learning
 - All material used in this course will be **entirely reproducible**
@@ -48,22 +49,21 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 ## Topics to be covered 
 
-**Monday 28th November, 13:00-17:00**
+**Tuesday 14th November 2023, 10:00-16:00**
 
 - Introduction to R for Air Quality Data
-  - Getting familiar with R and RStudio
-  - Reading and interrogating data within R
+  - Reading and interrogating data within R (recapping pre-course prep)
   - Introducing statistical analysis; averages and trend lines
   - Using `openair` for air quality data analysis
-  
-**Tuesday 29th November, 09:00-16:00**
-
-- Further uses of R in Data Science
   - Reading and combining multiple data streams
   - Further data handling; reshaping, grouping and summarising
-  - Real world data project
   
-- Making publication standard visualisations with `ggplot2`
+**Tuesday 21st November 2023, 10:00-16:00**
+
+- Data visualisation
+  - Introduction to the `ggplot2` plotting library
+  - Examples of different plot types
+  - Making publication standard visualisations
 
 ## Who are we?
 
@@ -138,7 +138,7 @@ I use R for:
 
 ## Set-up
 
--  Download the course materials from Google Drive and setup a Project  
+-  Ensure you have cloned this [repository](github.com/wacl-york/wacl_r_intro)
 
 -  Make sure your packages are loaded!
 
@@ -147,7 +147,7 @@ library(openair)
 library(dplyr)
 ```
 
-# Day 1
+# Day 1 - Morning
 
 ## Reading in data
 
@@ -161,7 +161,7 @@ library(dplyr)
 
 ## Statistics
 
-**Find the mean and standard devation of your NO2:NO<sub>x</sub> column, and fit a trendline of NO<sub>x</sub> ~ NO2.**
+**Find the mean and standard deviation of your NO2:NO<sub>x</sub> column, and fit a trendline of NO<sub>x</sub> ~ NO2.**
 
 -  You may need to drop NA values.
 
@@ -179,11 +179,11 @@ library(dplyr)
 
 -  If you would like more data, `openair::mydata` contains some extra timeseries data that is ready to go!
 
-# Day 2
+# Day 1 - Afternoon
 
 ## Reading in data
 
-**Read in the same data from yesterday, but using a more reproducibe workflow.**
+**Read in the same data from this morning, but using a more reproducible workflow.**
 
 -  Use lists and loops, similar to the example.
 
@@ -191,7 +191,7 @@ library(dplyr)
 
 ## Data Manipulation
 
-**"Tidy" your data using `pivot_longer()`, then find the mean and standard deviation of each pollutant using `dplyr`. Also find the hour at which each pollutant peaks in the data frame.**
+**_Tidy_ your data using `pivot_longer()`, then find the mean and standard deviation of each pollutant using `dplyr`. Also find the hour at which each pollutant peaks in the data frame.**
 
 -  You'll not be able to work out the mean/sd *and* find the time at which the pollutants peak in the same pipeline; think about how you structure your script to avoid repetition.
 
@@ -210,15 +210,13 @@ library(dplyr)
 # Real World Exercise
 
 
-## Getting ready
-
-- **TODO: Remove this if think won't make it here, and replace with ggplot workshop contents**
+## Preparation
 
 -  Complete one or more of these challenges!
 
-  -   These are much more open-ended than things we've done so far and gives you a taste of "real" data science.
+  -   These are much more open-ended than things we've done so far and gives you a taste of 'real' data science.
   
-  -   If you're struggling, do work together and ask for help!
+  -   If you're struggling, work together and ask for help!
 
 ## Challenge 0: Reading Data
 
