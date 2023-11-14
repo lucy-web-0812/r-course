@@ -10,3 +10,5 @@ Autocomplete file path - Tab (after having opened quotation marks)
 
 Insert arrow (<-) - alt + "-"
 pipe - ctrl + shift + m
+
+ctrl + shift + r - insert section
