@@ -438,7 +438,7 @@ polarPlot(my1, pol = "no")
 
 # Afternoon: Flow control and tidy data
 
-## Reading trickier data
+## Flow control: for loops and if statements
 
 -  Brief recap previous day (reading data).
 
@@ -754,7 +754,7 @@ all_sites |> count(site)
 
   - Reading in data exercise
 
-## Manipulating, Reshaping and Summarising Data
+## Tidy (long) data
 
 Summaries.
 
